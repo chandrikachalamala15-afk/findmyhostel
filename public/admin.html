@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin & Warden Dashboard - Find My Hostel</title>
+    <meta name="description" content="Administration portal for SRGEC hostel bed occupancy, complaint management, and fee tracking.">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Modern Centralized Theme -->
+    <link rel="stylesheet" href="css/modern-theme.css">
+
+    <style>
+        .admin-dashboard-body {
+            padding: 2.5rem 3rem 3.5rem;
+        }
+
+        .metric-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .metric-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: transform 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .metric-icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .metric-icon-blue { background: #eff6ff; color: #2563eb; }
+        .metric-icon-amber { background: #fefce8; color: #d97706; }
+        .metric-icon-rose { background: #fff1f2; color: #e11d48; }
+        .metric-icon-emerald { background: #ecfdf5; color: #059669; }
+
+        .metric-val {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+
+        .metric-label {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-top: 0.2rem;
+        }
+
+        /* Occupancy Matrix */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .matrix-cell {
+            padding: 0.85rem 0.5rem;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .matrix-cell.occupied {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .matrix-cell.available {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .matrix-cell.maintenance {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+
+        .matrix-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Priority and Status Badges */
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-badge.urgent { background: #ffe4e6; color: #be123c; }
+        .priority-badge.high { background: #ffedd5; color: #c2410c; }
+        .priority-badge.medium { background: #fef9c3; color: #a16207; }
+        .priority-badge.low { background: #f1f5f9; color: #475569; }
+
+        .status-chip {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .status-chip.pending { background: #fef3c7; color: #92400e; }
+        .status-chip.in_progress { background: #dbeafe; color: #1e40af; }
+        .status-chip.resolved { background: #d1fae5; color: #065f46; }
+        .status-chip.rejected { background: #fee2e2; color: #991b1b; }
+
+        /* Modal */
+        .admin-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .admin-modal-overlay.active {
+            display: flex;
+        }
+
+        .admin-modal-box {
+            background: #ffffff;
+            border-radius: var(--radius-card);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+            width: 100%;
+            max-width: 480px;
+            padding: 2.25rem;
+            position: relative;
+        }
+
+        @media (max-width: 900px) {
+            .admin-dashboard-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Atmospheric Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        
+        <!-- Main Floating Card Container -->
+        <main class="floating-card-container">
+
+            <!-- Card Header & Navigation -->
+            <header class="card-navbar">
+                <a href="index.html" class="brand-pill">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ADMIN PORTAL</span>
+                </a>
+
+                <nav class="nav-links-group" id="mainNav">
+                    <a href="index.html" class="nav-link-custom">Home</a>
+                    <a href="hostels.html" class="nav-link-custom">Explore Hostels</a>
+                    <a href="hostel-details.html?id=1" class="nav-link-custom">Hostel Details</a>
+                    <a href="admin.html" class="nav-link-custom active">Dashboard</a>
+                    <div id="connectionStatusPill" class="connection-status-pill">
+                        <span class="status-dot online"></span>
+                        <span id="connectionStatusText">Live API</span>
+                    </div>
+                </nav>
+
+                <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Admin Banner Header -->
+            <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1d4ed8 100%); color: #ffffff; padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <div style="font-size: 0.85rem; font-weight: 600; opacity: 0.85; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.35rem;">
+                        <i class="fas fa-university me-1"></i> SRGEC Hostel Administration
+                    </div>
+                    <h1 style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.25rem;">Hostel Warden & Management Hub</h1>
+                    <p style="opacity: 0.85; font-size: 0.95rem;">Monitor room allocations, resolve student grievances, and oversee fee schedules.</p>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="hostels.html" class="btn-pill-outline" style="background: rgba(255, 255, 255, 0.15); color: #ffffff !important; border-color: rgba(255, 255, 255, 0.3);">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Public View</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard Content -->
+            <div class="admin-dashboard-body">
+
+                <!-- 4 KPI Metrics Cards -->
+                <div class="metric-cards-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon-box metric-icon-blue">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <div>
+                            <div class="metric-val" id="kpiBeds">552 / 620</div>
+                            <div class="metric-label">Beds Occupied (89%)</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon-box metric-icon-amber">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <div class="metric-val" id="kpiComplaints">4</div>
+                            <div class="metric-label">Open Grievances</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon-box metric-icon-rose">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <div>
+                            <div class="metric-val">₹66,000</div>
+                            <div class="metric-label">Overdue Fee Balance</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon-box metric-icon-emerald">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div>
+                            <div class="metric-val">4.5 / 5.0</div>
+                            <div class="metric-label">Student Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Occupancy Matrix Section -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 2rem; box-shadow: var(--shadow-card); margin-bottom: 2.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;"><i class="fas fa-th me-2 text-primary"></i>Live Room Occupancy Matrix</h2>
+                            <p style="font-size: 0.88rem; color: #64748b;">Visual status of SRGEC Boys and Girls hostel wing rooms.</p>
+                        </div>
+                        <div style="display: flex; gap: 1rem; font-size: 0.8rem; font-weight: 600;">
+                            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #3b82f6;"></span> Occupied</span>
+                            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #10b981;"></span> Available</span>
+                            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #f97316;"></span> Maintenance</span>
+                        </div>
+                    </div>
+
+                    <div class="matrix-grid" id="occupancyMatrixGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Complaints Triage & Resolution Table (Live API) -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 2rem; box-shadow: var(--shadow-card); margin-bottom: 2.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;"><i class="fas fa-clipboard-list me-2 text-warning"></i>Student Complaints & Grievance Triage</h2>
+                            <p style="font-size: 0.88rem; color: #64748b;">Real-time queue synchronized with complaint_controller.php.</p>
+                        </div>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student</th>
+                                    <th>Hostel & Room</th>
+                                    <th>Category</th>
+                                    <th>Subject</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="complaintsTableBody">
+                                <tr>
+                                    <td colspan="8" style="text-align: center; padding: 2rem; color: #64748b;">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading complaints...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Overdue Fee Defaulters Monitor -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 2rem; box-shadow: var(--shadow-card);">
+                    <div style="margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;"><i class="fas fa-receipt me-2 text-danger"></i>Fee Due Tracking & Defaulters</h2>
+                        <p style="font-size: 0.88rem; color: #64748b;">Automated tracking of room rent and mess fee obligations.</p>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="table-custom" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Hostel Wing</th>
+                                    <th>Room</th>
+                                    <th>Due Amount</th>
+                                    <th>Overdue Duration</th>
+                                    <th>Last Payment</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Karthik Raju</strong></td>
+                                    <td>SRGEC Boys Hostel</td>
+                                    <td>Room 103</td>
+                                    <td><strong style="color: #ef4444;">₹66,000</strong></td>
+                                    <td><span style="color: #ef4444; font-weight: 600;">37 days</span></td>
+                                    <td>2026-08-15</td>
+                                    <td>
+                                        <button class="btn-pill-primary" onclick="alert('Payment reminder SMS and email sent to Karthik Raju.')" style="padding: 0.35rem 0.85rem; font-size: 0.78rem; background: #f59e0b;">
+                                            <i class="fas fa-bell"></i> Remind
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Card Modern Footer -->
+            <footer class="card-footer-bar">
+                <div class="footer-bottom-copy" style="border-top: none; padding-top: 0;">
+                    <div>&copy; 2026 Find My Hostel Administration. Seshadri Rao Gudlavalleru Engineering College.</div>
+                    <div><a href="index.html" style="color: #94a3b8; text-decoration: none;">Back to Student Portal</a></div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Complaint Status Update Modal -->
+    <div class="admin-modal-overlay" id="statusModal">
+        <div class="admin-modal-box">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem;">Update Complaint Lifecycle</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">Record status transition and resolution notes.</p>
+
+            <form id="statusUpdateForm">
+                <input type="hidden" id="modalComplaintId">
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">New Status</label>
+                    <select id="modalStatusSelect" class="form-input-custom" required>
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Assigned Staff ID / Warden</label>
+                    <input type="text" id="modalAssignedStaff" class="form-input-custom" value="3 (Rahul Kumar)">
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Resolution Notes</label>
+                    <textarea id="modalResolutionNotes" rows="3" class="form-textarea-custom" placeholder="Electrician dispatched, capacitor replaced..."></textarea>
+                </div>
+
+                <div id="modalAlert" style="display: none; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+                <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    <button type="button" id="closeStatusModalBtn" class="btn-pill-outline" style="padding: 0.6rem 1.25rem;">Cancel</button>
+                    <button type="submit" id="saveStatusBtn" class="btn-pill-primary" style="padding: 0.6rem 1.5rem;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- API Client Script -->
+    <script src="js/api-client.js"></script>
+
+    <!-- Admin Script -->
+    <script>
+        const sampleRooms = [
+            { num: '101', status: 'occupied' }, { num: '102', status: 'occupied' }, { num: '103', status: 'occupied' }, { num: '104', status: 'available' },
+            { num: '201', status: 'occupied' }, { num: '202', status: 'available' }, { num: '203', status: 'occupied' }, { num: '204', status: 'maintenance' },
+            { num: '205', status: 'available' }, { num: '206', status: 'occupied' }, { num: '301', status: 'occupied' }, { num: '302', status: 'available' },
+            { num: '303', status: 'occupied' }, { num: '304', status: 'maintenance' }, { num: '305', status: 'available' }, { num: '306', status: 'occupied' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Render Initial Occupancy Matrix from Fallback / Default
+            const matrixGrid = document.getElementById('occupancyMatrixGrid');
+            matrixGrid.innerHTML = sampleRooms.map(r => `
+                <div class="matrix-cell ${r.status}" onclick="alert('Room ${r.num} is currently ${r.status}. Click to inspect occupant profile.')">
+                    <span>${r.num}</span>
+                    <span style="font-size: 0.7rem; font-weight: 500; text-transform: uppercase;">${r.status.slice(0, 3)}</span>
+                </div>
+            `).join('');
+
+            // Load live room occupancy matrix & capacity KPIs
+            try {
+                const hostelRes = await ApiClient.getHostelById(1);
+                if (hostelRes && hostelRes.hostel) {
+                    const h = hostelRes.hostel;
+                    if (h.total_capacity && h.current_occupancy) {
+                        const pct = Math.round((h.current_occupancy / h.total_capacity) * 100);
+                        document.getElementById('kpiBeds').textContent = `${h.current_occupancy} / ${h.total_capacity}`;
+                        const labelEl = document.querySelector('#kpiBeds + .metric-label');
+                        if (labelEl) labelEl.textContent = `Beds Occupied (${pct}%)`;
+                    }
+                    if (Array.isArray(h.rooms) && h.rooms.length > 0) {
+                        matrixGrid.innerHTML = h.rooms.map(r => `
+                            <div class="matrix-cell ${r.room_status || 'available'}" onclick="alert('Room ${r.room_number}: ${r.room_type} (${r.available_beds ?? (r.capacity - (r.current_occupancy || 0))} beds free, ₹${Number(r.monthly_fee).toLocaleString()}/mo)')">
+                                <span>${r.room_number}</span>
+                                <span style="font-size: 0.7rem; font-weight: 500; text-transform: uppercase;">${(r.room_status || 'avail').slice(0, 3)}</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (err) {
+                console.warn('Live room matrix load deferred to fallback:', err);
+            }
+
+            // Modal elements
+            const modal = document.getElementById('statusModal');
+            const closeBtn = document.getElementById('closeStatusModalBtn');
+            closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+
+            // Load Complaints via ApiClient
+            async function loadComplaints() {
+                const tbody = document.getElementById('complaintsTableBody');
+                const res = await ApiClient.getComplaints();
+
+                // Update connection status
+                const statusPill = document.getElementById('connectionStatusPill');
+                if (statusPill) {
+                    statusPill.innerHTML = res.source === 'api'
+                        ? '<span class="status-dot online"></span> Live API'
+                        : '<span class="status-dot offline"></span> Demo Mode';
+                }
+
+                if (res.summary && res.summary.total_complaints) {
+                    document.getElementById('kpiComplaints').textContent = res.summary.total_complaints;
+                }
+
+                if (!res.complaints || res.complaints.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: #64748b;">No active grievances logged.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = res.complaints.map(c => `
+                    <tr>
+                        <td>#${c.complaint_id}</td>
+                        <td><strong>${c.first_name} ${c.last_name || ''}</strong></td>
+                        <td>${c.hostel_name || 'SRGEC Hostel'} - Room ${c.room_number || 'N/A'}</td>
+                        <td style="text-transform: capitalize;">${c.category}</td>
+                        <td>${c.subject}</td>
+                        <td><span class="priority-badge ${c.priority || 'medium'}">${c.priority || 'medium'}</span></td>
+                        <td><span class="status-chip ${c.status || 'pending'}">${(c.status || 'pending').replace('_', ' ')}</span></td>
+                        <td>
+                            <button class="btn-pill-primary" onclick="openUpdateModal(${c.complaint_id}, '${c.status || 'pending'}', '${(c.resolution_notes || '').replace(/'/g, "\\'")}')" style="padding: 0.35rem 0.85rem; font-size: 0.78rem;">
+                                <i class="fas fa-edit"></i> Update
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            window.openUpdateModal = function (id, status, notes) {
+                document.getElementById('modalComplaintId').value = id;
+                document.getElementById('modalStatusSelect').value = status;
+                document.getElementById('modalResolutionNotes').value = notes || '';
+                document.getElementById('modalAlert').style.display = 'none';
+                modal.classList.add('active');
+            };
+
+            // Form Submit handler
+            document.getElementById('statusUpdateForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const id = document.getElementById('modalComplaintId').value;
+                const status = document.getElementById('modalStatusSelect').value;
+                const notes = document.getElementById('modalResolutionNotes').value;
+                const alertBox = document.getElementById('modalAlert');
+
+                const res = await ApiClient.updateComplaintStatus(id, status, notes, 3);
+                alertBox.style.display = 'block';
+                if (res.success) {
+                    alertBox.style.background = '#dcfce7';
+                    alertBox.style.color = '#15803d';
+                    alertBox.textContent = res.message || 'Status successfully updated!';
+                    setTimeout(() => {
+                        modal.classList.remove('active');
+                        loadComplaints();
+                    }, 1200);
+                } else {
+                    alertBox.style.background = '#fee2e2';
+                    alertBox.style.color = '#b91c1c';
+                    alertBox.textContent = res.message || 'Update failed.';
+                }
+            });
+
+            // Initial complaints load
+            loadComplaints();
+        });
+    </script>
+</body>
+</html>

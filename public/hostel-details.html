@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Details - Find My Hostel</title>
+    <meta name="description" content="View verified hostel room availability, monthly fees, 7-day mess menus, and contact information in Gudlavalleru.">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Modern Centralized Theme -->
+    <link rel="stylesheet" href="css/modern-theme.css">
+
+    <style>
+        .details-hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 3rem 3.5rem;
+            position: relative;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2.5rem;
+            padding: 3rem 3.5rem;
+        }
+
+        .gallery-main {
+            height: 380px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            border-radius: var(--radius-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 5rem;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-thumbs {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .gallery-thumb {
+            flex: 1;
+            height: 75px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .gallery-thumb.active,
+        .gallery-thumb:hover {
+            border-color: var(--brand-blue);
+            color: var(--brand-blue);
+            background: #eff6ff;
+        }
+
+        .info-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 2rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .amenities-pill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .amenity-box {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .amenity-box i {
+            color: var(--brand-blue);
+            font-size: 1.1rem;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .table-custom th {
+            background: #f8fafc;
+            padding: 0.9rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .table-custom td {
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #1e293b;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table-custom tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-avail {
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-avail.available { background: #dcfce7; color: #15803d; }
+        .badge-avail.limited { background: #fef9c3; color: #a16207; }
+        .badge-avail.occupied { background: #fee2e2; color: #b91c1c; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: var(--radius-card);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+            width: 100%;
+            max-width: 520px;
+            padding: 2.25rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        .form-group-custom {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-input-custom,
+        .form-textarea-custom {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            color: #0f172a;
+        }
+
+        .form-input-custom:focus,
+        .form-textarea-custom:focus {
+            border-color: var(--brand-blue);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        @media (max-width: 960px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            .details-hero {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Atmospheric Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        
+        <!-- Main Floating Card Container -->
+        <main class="floating-card-container">
+
+            <!-- Card Header & Navigation -->
+            <header class="card-navbar">
+                <a href="index.html" class="brand-pill">
+                    <i class="fas fa-hotel"></i>
+                    <span>FIND MY HOSTEL</span>
+                </a>
+
+                <nav class="nav-links-group" id="mainNav">
+                    <a href="index.html" class="nav-link-custom">Home</a>
+                    <a href="hostels.html" class="nav-link-custom">Explore Hostels</a>
+                    <a href="hostel-details.html?id=1" class="nav-link-custom active">Hostel Details</a>
+                    <a href="admin.html" class="nav-link-custom">Admin Portal</a>
+                    <div id="connectionStatusPill" class="connection-status-pill">
+                        <span class="status-dot online"></span>
+                        <span id="connectionStatusText">Live API</span>
+                    </div>
+                </nav>
+
+                <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Hostel Header Hero Banner -->
+            <div class="details-hero">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+                    <div>
+                        <div style="display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem;">
+                            <span id="hostelTypeBadge" class="type-pill" style="position: static;">Hostel</span>
+                            <span class="verified-pill" style="position: static;"><i class="fas fa-check-circle"></i> Verified by Administration</span>
+                        </div>
+
+                        <h1 id="hostelTitle" style="font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem;">Loading Accommodation...</h1>
+                        
+                        <div style="display: flex; align-items: center; gap: 1.25rem; font-size: 0.95rem; opacity: 0.9; flex-wrap: wrap;">
+                            <span><i class="fas fa-map-marker-alt me-1"></i> <span id="hostelAddress">Gudlavalleru</span></span>
+                            <span><i class="fas fa-walking me-1"></i> <span id="hostelDistance">0.5</span> km to SRGEC</span>
+                            <span><i class="fas fa-star me-1" style="color: #facc15;"></i> <strong id="hostelRating">4.5</strong> / 5.0</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.85rem; align-items: center;">
+                        <button id="openEnquiryModalBtn" class="btn-pill-primary" style="background: #ffffff; color: var(--brand-blue) !important; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Send Booking Enquiry</span>
+                        </button>
+                        <a id="callHostelBtn" href="tel:08671234567" class="btn-pill-outline" style="color: #ffffff !important; border-color: rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.1);">
+                            <i class="fas fa-phone"></i>
+                            <span>Call Warden</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Content Grid -->
+            <div class="details-grid">
+
+                <!-- Left Column: Media, Rooms, Food, Rules -->
+                <div>
+                    <!-- Photo Gallery Preview -->
+                    <div class="gallery-main" id="galleryMain">
+                        <i class="fas fa-building" id="galleryMainIcon"></i>
+                    </div>
+
+                    <div class="gallery-thumbs">
+                        <div class="gallery-thumb active" onclick="switchGallery('building', this)"><i class="fas fa-building"></i></div>
+                        <div class="gallery-thumb" onclick="switchGallery('bed', this)"><i class="fas fa-bed"></i></div>
+                        <div class="gallery-thumb" onclick="switchGallery('utensils', this)"><i class="fas fa-utensils"></i></div>
+                        <div class="gallery-thumb" onclick="switchGallery('dumbbell', this)"><i class="fas fa-dumbbell"></i></div>
+                        <div class="gallery-thumb" onclick="switchGallery('book-reader', this)"><i class="fas fa-book-reader"></i></div>
+                    </div>
+
+                    <!-- Description Card -->
+                    <div class="info-card" style="margin-top: 2rem;">
+                        <h3><i class="fas fa-info-circle text-primary"></i> About This Accommodation</h3>
+                        <p id="hostelDesc" style="color: #475569; line-height: 1.8; font-size: 0.95rem;">
+                            Loading description...
+                        </p>
+                    </div>
+
+                    <!-- Facilities & Amenities -->
+                    <div class="info-card">
+                        <h3><i class="fas fa-concierge-bell text-primary"></i> Included Facilities</h3>
+                        <div class="amenities-pill-grid" id="amenitiesGrid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Room Types & Pricing Table -->
+                    <div class="info-card">
+                        <h3><i class="fas fa-bed text-primary"></i> Room Inventory & Monthly Fees</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Room Type</th>
+                                        <th>Sharing</th>
+                                        <th>AC Available</th>
+                                        <th>Monthly Fee</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="roomsTableBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 7-Day Weekly Mess Menu Table -->
+                    <div class="info-card">
+                        <h3><i class="fas fa-utensils text-primary"></i> Weekly Mess Timetable</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Breakfast (7:30 - 9:00 AM)</th>
+                                        <th>Lunch (12:30 - 2:00 PM)</th>
+                                        <th>Dinner (7:30 - 9:00 PM)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="messMenuTableBody">
+                                    <tr><td><strong>Monday</strong></td><td>Idli, Sambar, Coconut Chutney</td><td>Rice, Dal, Sambar, Potato Fry</td><td>Chapati, Veg Curry, Curd</td></tr>
+                                    <tr><td><strong>Tuesday</strong></td><td>Puri, Aloo Masala</td><td>Rice, Rasam, Tomato Curry, Curd</td><td>Veg Biryani, Onion Raita</td></tr>
+                                    <tr><td><strong>Wednesday</strong></td><td>Dosa, Peanut Chutney</td><td>Rice, Sambar, Ladies Finger Fry</td><td>Roti, Paneer Butter Masala</td></tr>
+                                    <tr><td><strong>Thursday</strong></td><td>Upma, Tomato Sevai</td><td>Rice, Pappu, Drumstick Sambar</td><td>Chapati, Aloo Gobi</td></tr>
+                                    <tr><td><strong>Friday</strong></td><td>Pongal, Vada, Chutney</td><td>Special Pulao, Curd, Dal Makhani</td><td>Fried Rice, Veg Manchurian</td></tr>
+                                    <tr><td><strong>Saturday</strong></td><td>Mysore Bonda, Chutney</td><td>Rice, Tomato Pappu, Rasam, Papad</td><td>Chapati, Mixed Veg Curry</td></tr>
+                                    <tr><td><strong>Sunday</strong></td><td>Chole Bhature</td><td>Special Biryani / Chicken Curry</td><td>Roti, Dal Tadka, Sweet Kheer</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Quick Info, Map Link, Rules -->
+                <div>
+                    <!-- Quick Summary Card -->
+                    <div class="info-card" style="position: sticky; top: 2rem;">
+                        <h3 style="font-size: 1.15rem;"><i class="fas fa-clipboard-check text-primary"></i> Quick Overview</h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid #f1f5f9;">
+                                <span style="color: #64748b; font-size: 0.88rem;">Total Capacity</span>
+                                <strong id="statCapacity" style="color: #0f172a;">200 Beds</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid #f1f5f9;">
+                                <span style="color: #64748b; font-size: 0.88rem;">Current Occupancy</span>
+                                <strong id="statOccupancy" style="color: #0f172a;">185 Beds</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid #f1f5f9;">
+                                <span style="color: #64748b; font-size: 0.88rem;">Available Vacancies</span>
+                                <strong id="statAvailable" style="color: #16a34a;">15 Beds</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid #f1f5f9;">
+                                <span style="color: #64748b; font-size: 0.88rem;">Curfew / Gate Close</span>
+                                <strong style="color: #0f172a;">9:00 PM</strong>
+                            </div>
+                        </div>
+
+                        <!-- Direct Booking Action -->
+                        <button id="sidebarEnquiryBtn" class="btn-pill-primary" style="width: 100%; justify-content: center; margin-bottom: 0.75rem;">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Reserve a Bed</span>
+                        </button>
+
+                        <a id="gmapsLink" href="https://maps.google.com/?q=Gudlavalleru" target="_blank" class="btn-pill-outline" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-directions"></i>
+                            <span>Open in Google Maps</span>
+                        </a>
+
+                        <!-- Rules and Regulations -->
+                        <div style="margin-top: 2rem;">
+                            <h4 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem;"><i class="fas fa-gavel me-2 text-warning"></i>Hostel Guidelines</h4>
+                            <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: #64748b; line-height: 1.6;">
+                                <li>College ID card must be worn within premises.</li>
+                                <li>Night biometric attendance logged at 8:30 PM.</li>
+                                <li>Parent/guardian permission required for night outs.</li>
+                                <li>Zero tolerance policy for ragging or disturbance.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Card Modern Footer -->
+            <footer class="card-footer-bar">
+                <div class="footer-bottom-copy" style="border-top: none; padding-top: 0;">
+                    <div>&copy; 2026 Find My Hostel. Seshadri Rao Gudlavalleru Engineering College.</div>
+                    <div><a href="hostels.html" style="color: #94a3b8; text-decoration: none;">Browse More Accommodations</a></div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Student Booking Enquiry Modal -->
+    <div class="modal-overlay" id="enquiryModal">
+        <div class="modal-card">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem;">Send Booking Enquiry</h3>
+            <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1.5rem;">Your query will be delivered directly to the warden and college administration.</p>
+
+            <form id="bookingEnquiryForm">
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Full Name *</label>
+                    <input type="text" id="enqName" required class="form-input-custom" placeholder="e.g. Arjun Reddy">
+                </div>
+
+                <div class="form-group-custom" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label class="form-label-custom">Email Address *</label>
+                        <input type="email" id="enqEmail" required class="form-input-custom" placeholder="student@gmail.com">
+                    </div>
+                    <div>
+                        <label class="form-label-custom">Mobile Number</label>
+                        <input type="tel" id="enqPhone" class="form-input-custom" placeholder="9876543210">
+                    </div>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Subject</label>
+                    <input type="text" id="enqSubject" class="form-input-custom" placeholder="Room availability enquiry for 2nd year student">
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Message / Preferred Sharing *</label>
+                    <textarea id="enqMessage" rows="3" required class="form-textarea-custom" placeholder="I am looking for a double sharing room starting next semester..."></textarea>
+                </div>
+
+                <div id="enquiryResponseAlert" style="display: none; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+                <button type="submit" id="submitEnquiryBtn" class="btn-pill-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Submit Enquiry</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- API Client Script -->
+    <script src="js/api-client.js"></script>
+
+    <!-- Page Detail Script -->
+    <script>
+        let currentHostelId = 1;
+
+        function switchGallery(iconName, thumbEl) {
+            document.getElementById('galleryMainIcon').className = `fas fa-${iconName}`;
+            document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+            thumbEl.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentHostelId = urlParams.get('id') || 1;
+
+            // Modal Controls
+            const modal = document.getElementById('enquiryModal');
+            const openBtns = [document.getElementById('openEnquiryModalBtn'), document.getElementById('sidebarEnquiryBtn')];
+            const closeBtn = document.getElementById('closeModalBtn');
+
+            openBtns.forEach(b => b?.addEventListener('click', () => modal.classList.add('active')));
+            closeBtn?.addEventListener('click', () => modal.classList.remove('active'));
+            modal?.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+
+            // Fetch single hostel details
+            const res = await ApiClient.getHostelById(currentHostelId);
+            const hostel = res.hostel;
+
+            // Connection indicator
+            const statusPill = document.getElementById('connectionStatusPill');
+            if (statusPill) {
+                statusPill.innerHTML = res.source === 'api' 
+                    ? '<span class="status-dot online"></span> Live API'
+                    : '<span class="status-dot offline"></span> Demo Mode';
+            }
+
+            if (hostel) {
+                document.getElementById('hostelTitle').textContent = hostel.hostel_name;
+                document.getElementById('hostelTypeBadge').textContent = (hostel.hostel_type || 'Hostel').toUpperCase();
+                document.getElementById('hostelAddress').textContent = `${hostel.landmark ? hostel.landmark + ', ' : ''}${hostel.address || 'Gudlavalleru'}`;
+                document.getElementById('hostelDistance').textContent = hostel.distance_from_college_km || '0.5';
+                document.getElementById('hostelRating').textContent = Number(hostel.rating || 4.5).toFixed(1);
+                document.getElementById('hostelDesc').textContent = hostel.description || 'Comfortable and secure hostel accommodation for SRGEC students.';
+                document.getElementById('callHostelBtn').href = `tel:${hostel.phone || '08671234567'}`;
+                document.getElementById('gmapsLink').href = `https://maps.google.com/?q=${encodeURIComponent(hostel.hostel_name + ' Gudlavalleru')}`;
+
+                // Capacity Stats
+                document.getElementById('statCapacity').textContent = `${hostel.total_capacity || 150} Beds`;
+                document.getElementById('statOccupancy').textContent = `${hostel.current_occupancy || 135} Beds`;
+                const freeBeds = Math.max(0, (hostel.total_capacity || 150) - (hostel.current_occupancy || 135));
+                document.getElementById('statAvailable').textContent = `${freeBeds} Beds`;
+
+                // Amenities
+                const facilities = Array.isArray(hostel.facilities_available) ? hostel.facilities_available : ['wifi', 'mess', 'security', 'study_room'];
+                const facilityIcons = {
+                    wifi: 'wifi',
+                    mess: 'utensils',
+                    ac: 'snowflake',
+                    attached_bathroom: 'bath',
+                    gym: 'dumbbell',
+                    study_room: 'book-reader',
+                    laundry: 'tshirt',
+                    security: 'shield-alt',
+                    cctv: 'video',
+                    medical_room: 'first-aid',
+                    purified_water: 'tint'
+                };
+
+                const amenitiesGrid = document.getElementById('amenitiesGrid');
+                amenitiesGrid.innerHTML = facilities.map(f => `
+                    <div class="amenity-box">
+                        <i class="fas fa-${facilityIcons[f] || 'check'}"></i>
+                        <span>${f.replace('_', ' ').toUpperCase()}</span>
+                    </div>
+                `).join('');
+
+                // Rooms Table
+                const rooms = hostel.rooms && hostel.rooms.length > 0 ? hostel.rooms : [
+                    { room_type: 'Single Sharing (AC)', capacity: 1, has_ac: 1, monthly_fee: 9000, room_status: 'available' },
+                    { room_type: 'Double Sharing', capacity: 2, has_ac: 0, monthly_fee: 5500, room_status: 'available' },
+                    { room_type: 'Triple Sharing', capacity: 3, has_ac: 0, monthly_fee: 4500, room_status: 'limited' },
+                    { room_type: 'Dormitory (6-Bed)', capacity: 6, has_ac: 0, monthly_fee: 3200, room_status: 'available' }
+                ];
+
+                const roomsBody = document.getElementById('roomsTableBody');
+                roomsBody.innerHTML = rooms.map(r => `
+                    <tr>
+                        <td><strong>${r.room_type}</strong></td>
+                        <td>${r.capacity} Person</td>
+                        <td>${r.has_ac ? '<span style="color: #10b981;"><i class="fas fa-check"></i> Yes</span>' : '<span style="color: #94a3b8;">No</span>'}</td>
+                        <td><strong style="color: var(--brand-blue);">₹${Number(r.monthly_fee).toLocaleString()}</strong> / mo</td>
+                        <td><span class="badge-avail ${r.room_status || 'available'}">${r.room_status || 'Available'}</span></td>
+                    </tr>
+                `).join('');
+
+                // 7-Day Weekly Mess Menu Table
+                const messBody = document.getElementById('messMenuTableBody');
+                if (messBody && Array.isArray(hostel.mess_menu) && hostel.mess_menu.length > 0) {
+                    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+                    const menuByDay = {};
+                    days.forEach(d => { menuByDay[d] = { breakfast: 'Standard Breakfast', lunch: 'Standard Lunch', dinner: 'Standard Dinner' }; });
+
+                    hostel.mess_menu.forEach(item => {
+                        const d = (item.day_of_week || '').toLowerCase();
+                        const m = (item.meal_type || '').toLowerCase();
+                        if (menuByDay[d] && menuByDay[d][m] !== undefined) {
+                            menuByDay[d][m] = item.menu_items + (item.is_special ? ` <span class="badge-avail limited" style="font-size: 0.65rem;">Special</span>` : '');
+                        }
+                    });
+
+                    messBody.innerHTML = days.map(day => `
+                        <tr>
+                            <td><strong style="text-transform: capitalize;">${day}</strong></td>
+                            <td>${menuByDay[day].breakfast}</td>
+                            <td>${menuByDay[day].lunch}</td>
+                            <td>${menuByDay[day].dinner}</td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            // Enquiry Submission
+            const form = document.getElementById('bookingEnquiryForm');
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const btn = document.getElementById('submitEnquiryBtn');
+                const alertBox = document.getElementById('enquiryResponseAlert');
+
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+                const data = {
+                    hostel_id: currentHostelId,
+                    name: document.getElementById('enqName').value.trim(),
+                    email: document.getElementById('enqEmail').value.trim(),
+                    phone: document.getElementById('enqPhone').value.trim(),
+                    subject: document.getElementById('enqSubject').value.trim() || 'Hostel Booking Enquiry',
+                    message: document.getElementById('enqMessage').value.trim(),
+                    enquiry_type: 'booking'
+                };
+
+                const res = await ApiClient.submitEnquiry(data);
+
+                alertBox.style.display = 'block';
+                if (res.success) {
+                    alertBox.style.background = '#dcfce7';
+                    alertBox.style.color = '#15803d';
+                    alertBox.textContent = res.message || 'Enquiry submitted successfully! A representative will contact you.';
+                    form.reset();
+                    setTimeout(() => {
+                        modal.classList.remove('active');
+                        alertBox.style.display = 'none';
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Submit Enquiry</span>';
+                    }, 2500);
+                } else {
+                    alertBox.style.background = '#fee2e2';
+                    alertBox.style.color = '#b91c1c';
+                    alertBox.textContent = res.message || 'Submission error. Please check your details.';
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Submit Enquiry</span>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

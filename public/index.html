@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My Hostel - Student Accommodation in Gudlavalleru</title>
+    <meta name="description" content="Discover verified student hostels in Gudlavalleru near SRGEC. Explore room types, mess menus, facilities, and real-time fees.">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Modern Centralized Theme (Reference-Inspired) -->
+    <link rel="stylesheet" href="css/modern-theme.css">
+</head>
+<body>
+
+    <!-- Atmospheric Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        
+        <!-- Elevated Floating White Card (Reference Design Container) -->
+        <main class="floating-card-container">
+
+            <!-- Card Header & Navigation -->
+            <header class="card-navbar">
+                <a href="index.html" class="brand-pill">
+                    <i class="fas fa-hotel"></i>
+                    <span>FIND MY HOSTEL</span>
+                </a>
+
+                <nav class="nav-links-group" id="mainNav">
+                    <a href="index.html" class="nav-link-custom active">Home</a>
+                    <a href="hostels.html" class="nav-link-custom">Explore Hostels</a>
+                    <a href="hostel-details.html?id=1" class="nav-link-custom">Hostel Details</a>
+                    <a href="admin.html" class="nav-link-custom">Admin Portal</a>
+                    <div id="connectionStatusPill" class="connection-status-pill">
+                        <span class="status-dot online"></span>
+                        <span id="connectionStatusText">Checking API...</span>
+                    </div>
+                </nav>
+
+                <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Hero Section (Left: Copy & Search | Right: Reference-Styled Vector Art) -->
+            <section class="hero-stage">
+                
+                <!-- Left Hero Column -->
+                <div class="hero-left-content">
+                    <div class="tag-badge">
+                        <i class="fas fa-graduation-cap"></i> SRGEC Gudlavalleru Campus
+                    </div>
+
+                    <h1 class="hero-headline">
+                        FIND MY <span class="highlight">HOSTEL</span>
+                    </h1>
+
+                    <p class="hero-lead">
+                        The dedicated student housing platform for Gudlavalleru. Compare verified boys, girls, and private residencies, inspect weekly mess schedules, and secure comfortable rooms minutes from campus.
+                    </p>
+
+                    <!-- Interactive Quick Search Bar -->
+                    <form class="search-strip" id="quickSearchForm">
+                        <div class="search-field">
+                            <i class="fas fa-users"></i>
+                            <select id="quickType" aria-label="Hostel Type">
+                                <option value="">All Categories</option>
+                                <option value="boys">Boys Hostel</option>
+                                <option value="girls">Girls Hostel</option>
+                                <option value="co-ed">Co-Ed Residency</option>
+                            </select>
+                        </div>
+
+                        <div class="search-field">
+                            <i class="fas fa-rupee-sign"></i>
+                            <select id="quickBudget" aria-label="Max Budget">
+                                <option value="">Any Budget</option>
+                                <option value="4500">Under ₹4,500/mo</option>
+                                <option value="6000">Under ₹6,000/mo</option>
+                                <option value="10000">Under ₹10,000/mo</option>
+                            </select>
+                        </div>
+
+                        <div class="search-field">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="quickDistance" aria-label="Distance to College">
+                                <option value="">Any Distance</option>
+                                <option value="1">Within 1 km</option>
+                                <option value="2">Within 2 km</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-search-submit">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </button>
+                    </form>
+
+                    <!-- Secondary CTA Links -->
+                    <div style="display: flex; gap: 1rem; margin-top: 1.75rem; flex-wrap: wrap;">
+                        <a href="hostels.html" class="btn-pill-primary">
+                            <span>Browse All Accommodations</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="admin.html" class="btn-pill-outline">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Warden Dashboard</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Hero Column: High-Fidelity Vector Artwork Matching Reference -->
+                <div class="hero-illustration-box">
+                    
+                    <!-- Floating Star Rating Badge -->
+                    <div class="hero-rating-bubble">
+                        <i class="fas fa-star"></i>
+                        <span>4.8</span>
+                        <span style="color: #64748b; font-size: 0.75rem; font-weight: 500;">(Verified Reviews)</span>
+                    </div>
+
+                    <!-- Scalable Vector Artwork -->
+                    <svg viewBox="0 0 540 420" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="max-height: 420px; overflow: visible;">
+                        <defs>
+                            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#e0e7ff" stop-opacity="0.3" />
+                                <stop offset="100%" stop-color="#c7d2fe" stop-opacity="0.8" />
+                            </linearGradient>
+                            <linearGradient id="buildingGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="100%" stop-color="#f1f5f9" />
+                            </linearGradient>
+                            <linearGradient id="windowGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#93c5fd" />
+                                <stop offset="100%" stop-color="#60a5fa" />
+                            </linearGradient>
+                            <linearGradient id="marqueeGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#4361ee" />
+                                <stop offset="100%" stop-color="#3a0ca3" />
+                            </linearGradient>
+                            <linearGradient id="palmGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#1e3a8a" />
+                                <stop offset="100%" stop-color="#0f172a" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Background Ambient Hills / Shapes -->
+                        <path d="M -20 380 Q 140 240 300 320 T 560 260 L 560 420 L -20 420 Z" fill="#2563eb" opacity="0.8" />
+                        <path d="M 120 420 Q 320 220 560 300 L 560 420 Z" fill="#1d4ed8" opacity="0.9" />
+
+                        <!-- Palm Trees in Background -->
+                        <g id="palmTrees" fill="url(#palmGrad)">
+                            <!-- Palm Trunk Left -->
+                            <path d="M 160 380 Q 185 240 180 140 Q 192 140 180 380 Z" fill="#1e293b" />
+                            <!-- Palm Leaves Left -->
+                            <path d="M 180 140 Q 120 90 90 180 Q 130 140 180 140 Z" />
+                            <path d="M 180 140 Q 140 70 200 60 Q 180 110 180 140 Z" />
+                            <path d="M 180 140 Q 220 70 240 110 Q 210 130 180 140 Z" />
+                            <path d="M 180 140 Q 110 120 120 210 Q 150 160 180 140 Z" />
+
+                            <!-- Palm Trunk Right -->
+                            <path d="M 460 380 Q 440 250 450 180 Q 460 180 475 380 Z" fill="#1e293b" />
+                            <!-- Palm Leaves Right -->
+                            <path d="M 450 180 Q 490 120 530 190 Q 480 160 450 180 Z" />
+                            <path d="M 450 180 Q 430 110 400 160 Q 425 150 450 180 Z" />
+                            <path d="M 450 180 Q 470 110 510 130 Q 475 145 450 180 Z" />
+                        </g>
+
+                        <!-- Main Hostel / Hotel Architecture Centerpiece -->
+                        <g id="hotelBuilding" transform="translate(185, 95)">
+                            <!-- Building Base Shadow & Foundation -->
+                            <rect x="0" y="245" width="220" height="20" rx="4" fill="#38bdf8" />
+                            
+                            <!-- Main Multi-Tier Building Facade -->
+                            <rect x="15" y="25" width="190" height="225" rx="10" fill="url(#buildingGrad)" stroke="#cbd5e1" stroke-width="2" />
+                            <rect x="50" y="5" width="120" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+                            <!-- Architectural Top Accent -->
+                            <circle cx="110" cy="20" r="7" fill="#3b82f6" />
+
+                            <!-- Center Vertical Pier / Structural Feature -->
+                            <rect x="85" y="25" width="50" height="225" fill="#f1f5f9" />
+
+                            <!-- High-Glass Windows Grid -->
+                            <!-- Floor 4 -->
+                            <rect x="28" y="45" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="92" y="45" width="36" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="146" y="45" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+
+                            <!-- Floor 3 -->
+                            <rect x="28" y="85" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="92" y="85" width="36" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="146" y="85" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+
+                            <!-- Floor 2 -->
+                            <rect x="28" y="125" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="92" y="125" width="36" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="146" y="125" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+
+                            <!-- Floor 1 -->
+                            <rect x="28" y="165" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="92" y="165" width="36" height="26" rx="4" fill="url(#windowGrad)" />
+                            <rect x="146" y="165" width="46" height="26" rx="4" fill="url(#windowGrad)" />
+
+                            <!-- Ground Floor Entrance & Lobby Glass -->
+                            <rect x="25" y="205" width="52" height="42" rx="4" fill="url(#windowGrad)" />
+                            <rect x="88" y="202" width="44" height="48" rx="4" fill="#93c5fd" stroke="#2563eb" stroke-width="2" />
+                            <line x1="110" y1="202" x2="110" y2="250" stroke="#1d4ed8" stroke-width="2" />
+                            <rect x="143" y="205" width="52" height="42" rx="4" fill="url(#windowGrad)" />
+
+                            <!-- Vertical Marquee Sign (Right side of building, exactly like reference) -->
+                            <g transform="translate(195, 30)">
+                                <rect x="0" y="0" width="34" height="150" rx="8" fill="url(#marqueeGrad)" stroke="#ffffff" stroke-width="2" />
+                                <text x="17" y="32" font-family="'Poppins', sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle">H</text>
+                                <text x="17" y="54" font-family="'Poppins', sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle">O</text>
+                                <text x="17" y="76" font-family="'Poppins', sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle">S</text>
+                                <text x="17" y="98" font-family="'Poppins', sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle">T</text>
+                                <text x="17" y="120" font-family="'Poppins', sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle">E</text>
+                                <text x="17" y="140" font-family="'Poppins', sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle">L</text>
+                                <!-- Sign bottom stars -->
+                                <circle cx="10" cy="144" r="2" fill="#facc15" />
+                                <circle cx="17" cy="144" r="2" fill="#facc15" />
+                                <circle cx="24" cy="144" r="2" fill="#facc15" />
+                            </g>
+                        </g>
+
+                        <!-- Ground Surface Baseline -->
+                        <line x1="100" y1="365" x2="480" y2="365" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+
+                        <!-- Arriving Characters (Students with luggage, matching reference) -->
+                        <!-- Character 1 (Male Student arriving with yellow duffel bag) -->
+                        <g id="charMale" transform="translate(145, 235)">
+                            <!-- Head -->
+                            <circle cx="25" cy="20" r="12" fill="#fdba74" />
+                            <path d="M 15 16 Q 25 6 35 14 Q 38 18 36 24 Q 28 20 15 16 Z" fill="#0f172a" /> <!-- Hair -->
+                            <!-- Torso (White T-shirt) -->
+                            <path d="M 12 34 L 38 34 L 35 78 L 15 78 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                            <!-- Legs / Dark Pants -->
+                            <line x1="20" y1="78" x2="10" y2="130" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round" />
+                            <line x1="30" y1="78" x2="38" y2="130" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round" />
+                            <!-- Shoes -->
+                            <rect x="2" y="126" width="16" height="6" rx="3" fill="#0f172a" />
+                            <rect x="34" y="126" width="16" height="6" rx="3" fill="#0f172a" />
+                            <!-- Left Arm holding boarding pass / phone -->
+                            <line x1="36" y1="36" x2="48" y2="65" stroke="#fdba74" stroke-width="5" stroke-linecap="round" />
+                            <rect x="46" y="62" width="10" height="6" rx="1" fill="#ffffff" />
+                            <!-- Right Arm holding Yellow Duffel Bag -->
+                            <line x1="14" y1="36" x2="4" y2="70" stroke="#fdba74" stroke-width="5" stroke-linecap="round" />
+                            <rect x="-18" y="68" width="40" height="24" rx="10" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+                            <path d="M -5 68 Q 2 54 10 68" stroke="#78350f" stroke-width="3" fill="none" />
+                        </g>
+
+                        <!-- Character 2 (Female Student with Purple Rolling Suitcase) -->
+                        <g id="charFemale" transform="translate(305, 238)">
+                            <!-- Head & Bun -->
+                            <circle cx="25" cy="20" r="11" fill="#fdba74" />
+                            <circle cx="34" cy="14" r="6" fill="#0f172a" /> <!-- Hair Bun -->
+                            <path d="M 16 18 Q 26 10 34 18 Q 30 25 16 18 Z" fill="#0f172a" /> <!-- Hair -->
+                            <!-- Torso (Cyan / Teal Top) -->
+                            <path d="M 12 34 L 38 34 L 34 76 L 16 76 Z" fill="#2563eb" />
+                            <!-- Pants (Light Aqua) -->
+                            <line x1="20" y1="76" x2="18" y2="128" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" />
+                            <line x1="30" y1="76" x2="32" y2="128" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" />
+                            <!-- Shoes -->
+                            <rect x="12" y="124" width="14" height="6" rx="3" fill="#ffffff" />
+                            <rect x="28" y="124" width="14" height="6" rx="3" fill="#ffffff" />
+                            <!-- Arm pointing to entrance -->
+                            <line x1="16" y1="38" x2="-4" y2="48" stroke="#fdba74" stroke-width="5" stroke-linecap="round" />
+                            <!-- Arm holding rolling suitcase handle -->
+                            <line x1="34" y1="38" x2="44" y2="75" stroke="#fdba74" stroke-width="5" stroke-linecap="round" />
+                            <!-- Rolling Suitcase (Purple Gradient) -->
+                            <g transform="translate(40, 75)">
+                                <line x1="5" y1="0" x2="5" y2="15" stroke="#64748b" stroke-width="3" />
+                                <rect x="-8" y="15" width="28" height="42" rx="8" fill="#7c3aed" stroke="#6d28d9" stroke-width="1.5" />
+                                <circle cx="-3" cy="58" r="3" fill="#0f172a" />
+                                <circle cx="15" cy="58" r="3" fill="#0f172a" />
+                            </g>
+                        </g>
+
+                        <!-- Lush Green / Blue Tropical Foliage Base -->
+                        <path d="M 180 375 Q 195 335 220 375 Q 235 340 250 375 Z" fill="#0284c7" />
+                        <path d="M 330 375 Q 350 340 370 375 Q 390 330 410 375 Z" fill="#0369a1" />
+                    </svg>
+                </div>
+            </section>
+
+            <!-- Featured Hostels Dynamic Section (Powered by ApiClient) -->
+            <section class="content-section">
+                <div class="section-head">
+                    <div>
+                        <h2 class="section-title">Verified Accommodations</h2>
+                        <p class="section-subtitle">Top-rated student hostels in Gudlavalleru vetted for security, hygiene, and connectivity</p>
+                    </div>
+                    <a href="hostels.html" class="btn-pill-outline">
+                        <span>View All Hostels</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+
+                <!-- Live Dynamic Hostel Grid Container -->
+                <div class="hostel-grid" id="featuredHostelGrid">
+                    <!-- Populated dynamically by JavaScript -->
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64748b;">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 1rem; font-weight: 500;">Loading verified hostels from system...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SRGEC Student Welfare & Trust Badges -->
+            <section class="content-section" style="background: #f8fafc;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem;">
+                    <div style="background: #ffffff; padding: 2rem; border-radius: 16px; border: 1px solid #e2e8f0; text-align: center;">
+                        <div style="width: 55px; height: 55px; border-radius: 50%; background: #eff6ff; color: #3b82f6; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem;">
+                            <i class="fas fa-shield-check"></i>
+                        </div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Physical Verification</h3>
+                        <p style="font-size: 0.88rem; color: #64748b;">Every hostel is physically inspected for fire safety, 24/7 security, and hygienic dining before listing.</p>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 2rem; border-radius: 16px; border: 1px solid #e2e8f0; text-align: center;">
+                        <div style="width: 55px; height: 55px; border-radius: 50%; background: #fdf2f8; color: #db2777; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem;">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">7-Day Mess Menus</h3>
+                        <p style="font-size: 0.88rem; color: #64748b;">Review breakfast, lunch, and dinner menus before booking. Authentic South Indian vegetarian and non-veg options.</p>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 2rem; border-radius: 16px; border: 1px solid #e2e8f0; text-align: center;">
+                        <div style="width: 55px; height: 55px; border-radius: 50%; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem;">
+                            <i class="fas fa-walking"></i>
+                        </div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Walking Proximity</h3>
+                        <p style="font-size: 0.88rem; color: #64748b;">Hostels mapped within 0.3 km to 2.0 km radius of Seshadri Rao Gudlavalleru Engineering College main gates.</p>
+                    </div>
+
+                    <div style="background: #ffffff; padding: 2rem; border-radius: 16px; border: 1px solid #e2e8f0; text-align: center;">
+                        <div style="width: 55px; height: 55px; border-radius: 50%; background: #fefce8; color: #ca8a04; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.5rem;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Triage & Complaints</h3>
+                        <p style="font-size: 0.88rem; color: #64748b;">Built-in digital grievance redressal. Track plumbing, AC, or electrical maintenance requests in real-time.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card Modern Footer -->
+            <footer class="card-footer-bar">
+                <div class="footer-columns">
+                    <div class="footer-col">
+                        <h5>Find My Hostel</h5>
+                        <p>Providing students of Seshadri Rao Gudlavalleru Engineering College (SRGEC) with transparent, safe, and comfortable hostel accommodation listings.</p>
+                        <p style="margin-top: 0.75rem; font-size: 0.8rem; color: #64748b;">Gudlavalleru, Krishna District, Andhra Pradesh - 521336</p>
+                    </div>
+
+                    <div class="footer-col">
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="hostels.html">Hostel Catalog</a></li>
+                            <li><a href="admin.html">Warden / Admin Login</a></li>
+                            <li><a href="hostels.html?type=girls">Girls Accommodations</a></li>
+                            <li><a href="hostels.html?type=boys">Boys Accommodations</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h5>Facilities</h5>
+                        <ul>
+                            <li><a href="hostels.html?has_wifi=1">High-Speed WiFi</a></li>
+                            <li><a href="hostels.html?has_ac=1">Air Conditioned Rooms</a></li>
+                            <li><a href="hostels.html?has_mess=1">Mess Included</a></li>
+                            <li><a href="hostels.html?max_distance=1">Within 1 KM of Campus</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h5>Student Helpline</h5>
+                        <p><i class="fas fa-phone me-2" style="color: #38bdf8;"></i> +91 8671 234567</p>
+                        <p><i class="fas fa-envelope me-2" style="color: #38bdf8;"></i> support@findmyhostel.srgec.ac.in</p>
+                        <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+                            <a href="#" style="color: #ffffff; background: #1e293b; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" style="color: #ffffff; background: #1e293b; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" style="color: #ffffff; background: #1e293b; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-bottom-copy">
+                    <div>&copy; 2026 Find My Hostel. All rights reserved. Built for SRGEC Student Welfare.</div>
+                    <div style="display: flex; gap: 1.5rem;">
+                        <a href="#" style="color: #64748b; text-decoration: none;">Privacy Policy</a>
+                        <a href="#" style="color: #64748b; text-decoration: none;">Terms of Service</a>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- API Client Script -->
+    <script src="js/api-client.js"></script>
+
+    <!-- Page Interaction & API Binding Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Mobile navigation toggle
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mainNav = document.getElementById('mainNav');
+            if (mobileToggle && mainNav) {
+                mobileToggle.addEventListener('click', function () {
+                    mainNav.classList.toggle('active');
+                });
+            }
+
+            // Quick Search Form Redirection
+            const searchForm = document.getElementById('quickSearchForm');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const type = document.getElementById('quickType').value;
+                    const budget = document.getElementById('quickBudget').value;
+                    const distance = document.getElementById('quickDistance').value;
+
+                    const params = new URLSearchParams();
+                    if (type) params.set('type', type);
+                    if (budget) params.set('max_price', budget);
+                    if (distance) params.set('max_distance', distance);
+
+                    window.location.href = `hostels.html?${params.toString()}`;
+                });
+            }
+
+            // Fetch Featured Hostels via ApiClient
+            const gridContainer = document.getElementById('featuredHostelGrid');
+            try {
+                const res = await ApiClient.getHostels({ limit: 4, sort_by: 'rating' });
+                
+                // Update live status indicator pill
+                const statusPill = document.getElementById('connectionStatusPill');
+                const statusText = document.getElementById('connectionStatusText');
+                if (statusPill && statusText) {
+                    if (res.source === 'api') {
+                        statusPill.innerHTML = '<span class="status-dot online"></span> Live API Connected';
+                        statusPill.title = 'Connected to MySQL Backend';
+                    } else {
+                        statusPill.innerHTML = '<span class="status-dot offline"></span> Demo Mode (Seed Data)';
+                        statusPill.title = 'Serving verified SRGEC local seed dataset';
+                    }
+                }
+
+                if (!res.hostels || res.hostels.length === 0) {
+                    gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b;">No hostels available at this time.</p>';
+                    return;
+                }
+
+                // Render Hostels
+                gridContainer.innerHTML = res.hostels.slice(0, 4).map(h => {
+                    const typeBadgeClass = h.hostel_type === 'girls' ? 'Girls' : (h.hostel_type === 'boys' ? 'Boys' : 'Co-Ed');
+                    const facilities = Array.isArray(h.facilities_available) ? h.facilities_available : [];
+                    const feeDisplay = h.min_monthly_fee ? `₹${Number(h.min_monthly_fee).toLocaleString()}` : 'Contact for fee';
+
+                    return `
+                        <article class="modern-hostel-card">
+                            <div class="card-media-banner">
+                                <i class="fas fa-building banner-icon"></i>
+                                <span class="type-pill">${typeBadgeClass}</span>
+                                <span class="verified-pill"><i class="fas fa-check-circle"></i> Verified</span>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">${h.hostel_name}</h3>
+                                <div class="card-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${h.landmark ? h.landmark + ', ' : ''}${h.address}</span>
+                                </div>
+                                
+                                <div style="display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.85rem; font-size: 0.9rem;">
+                                    <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                    <strong style="color: #0f172a;">${Number(h.rating).toFixed(1)}</strong>
+                                    <span style="color: #94a3b8; font-size: 0.8rem;">(${h.distance_from_college_km} km to college)</span>
+                                </div>
+
+                                <div class="amenity-chip-group">
+                                    ${facilities.slice(0, 4).map(f => `<span class="amenity-chip"><i class="fas fa-check"></i> ${f.replace('_', ' ')}</span>`).join('')}
+                                </div>
+
+                                <div class="card-pricing-footer">
+                                    <div class="price-box">
+                                        <div class="amount">${feeDisplay}</div>
+                                        <div class="period">Starting per month</div>
+                                    </div>
+                                    <div class="card-actions">
+                                        <a href="hostel-details.html?id=${h.hostel_id}" class="btn-pill-primary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem;">
+                                            <span>Details</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error('Error rendering featured hostels:', err);
+                gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load hostels. Please try again.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Hostels in Gudlavalleru - Find My Hostel</title>
+    <meta name="description" content="Browse and search student hostels near SRGEC with dynamic filtering for budget, facilities, and distance.">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Modern Centralized Theme -->
+    <link rel="stylesheet" href="css/modern-theme.css">
+
+    <style>
+        /* Listing Layout Specific Styles */
+        .listing-container {
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 2.5rem;
+            padding: 2.5rem 3rem 3.5rem;
+        }
+
+        .filter-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-card);
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .filter-section {
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .filter-heading {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+
+        .custom-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox-label input {
+            accent-color: var(--brand-blue);
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+        }
+
+        .range-slider {
+            width: 100%;
+            accent-color: var(--brand-blue);
+            margin: 0.75rem 0 0.25rem;
+        }
+
+        .slider-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .filter-tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #eff6ff;
+            color: var(--brand-blue);
+            border: 1px solid #bfdbfe;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .filter-tag-pill i {
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .filter-tag-pill i:hover {
+            color: #ef4444;
+        }
+
+        @media (max-width: 960px) {
+            .listing-container {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            .filter-card {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Atmospheric Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        
+        <!-- Main Floating Card Container -->
+        <main class="floating-card-container">
+
+            <!-- Card Header & Navigation -->
+            <header class="card-navbar">
+                <a href="index.html" class="brand-pill">
+                    <i class="fas fa-hotel"></i>
+                    <span>FIND MY HOSTEL</span>
+                </a>
+
+                <nav class="nav-links-group" id="mainNav">
+                    <a href="index.html" class="nav-link-custom">Home</a>
+                    <a href="hostels.html" class="nav-link-custom active">Explore Hostels</a>
+                    <a href="hostel-details.html?id=1" class="nav-link-custom">Hostel Details</a>
+                    <a href="admin.html" class="nav-link-custom">Admin Portal</a>
+                    <div id="connectionStatusPill" class="connection-status-pill">
+                        <span class="status-dot online"></span>
+                        <span id="connectionStatusText">Live API</span>
+                    </div>
+                </nav>
+
+                <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Search Banner Header Inside Card -->
+            <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1d4ed8 100%); color: #ffffff; padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 1.5rem;">
+                <div>
+                    <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.5px;">Student Accommodations Catalog</h1>
+                    <p style="opacity: 0.85; font-size: 0.95rem; max-width: 600px;">Filter and compare verified student residences around Seshadri Rao Gudlavalleru Engineering College.</p>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="index.html" class="btn-pill-outline" style="background: rgba(255, 255, 255, 0.15); color: #ffffff !important; border-color: rgba(255, 255, 255, 0.3);">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Home</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Filter & Listing Content Stage -->
+            <div class="listing-container">
+
+                <!-- Left Column: Filter Sidebar -->
+                <aside class="filter-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <h2 style="font-size: 1.1rem; font-weight: 700; color: #0f172a;"><i class="fas fa-sliders-h me-2" style="color: var(--brand-blue);"></i>Filters</h2>
+                        <button id="resetFiltersBtn" style="background: none; border: none; color: #ef4444; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Reset All</button>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="filter-section">
+                        <div class="filter-heading">Search Name / Area</div>
+                        <div style="position: relative;">
+                            <input type="text" id="filterSearch" placeholder="e.g. SRGEC, Main Road..." style="width: 100%; padding: 0.65rem 0.85rem 0.65rem 2.2rem; border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-size: 0.88rem; outline: none;">
+                            <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 0.85rem; color: #94a3b8; font-size: 0.85rem;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Hostel Type -->
+                    <div class="filter-section">
+                        <div class="filter-heading">Hostel Category</div>
+                        <div class="filter-group">
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" name="hostelType" value="boys" id="typeBoys">
+                                <span>Boys Hostel</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" name="hostelType" value="girls" id="typeGirls">
+                                <span>Girls Hostel</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" name="hostelType" value="co-ed" id="typeCoed">
+                                <span>Co-Ed Residency</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Max Price Slider -->
+                    <div class="filter-section">
+                        <div class="filter-heading">
+                            <span>Max Monthly Budget</span>
+                            <span id="priceLabel" style="color: var(--brand-blue); font-weight: 700;">₹15,000</span>
+                        </div>
+                        <input type="range" min="3000" max="15000" step="500" value="15000" class="range-slider" id="priceRange">
+                        <div class="slider-meta">
+                            <span>₹3,000</span>
+                            <span>₹15,000</span>
+                        </div>
+                    </div>
+
+                    <!-- Distance from College -->
+                    <div class="filter-section">
+                        <div class="filter-heading">Distance to SRGEC</div>
+                        <div class="filter-group">
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="distanceRadio" value="" checked>
+                                <span>Any Distance</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="distanceRadio" value="0.5">
+                                <span>Within 0.5 km (Walking)</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="distanceRadio" value="1">
+                                <span>Within 1.0 km</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="distanceRadio" value="2">
+                                <span>Within 2.0 km</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Amenities -->
+                    <div class="filter-section">
+                        <div class="filter-heading">Key Amenities</div>
+                        <div class="filter-group">
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" id="facilityWifi" value="wifi">
+                                <span><i class="fas fa-wifi me-1 text-muted"></i> High-Speed WiFi</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" id="facilityMess" value="mess">
+                                <span><i class="fas fa-utensils me-1 text-muted"></i> Mess / Dining</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" id="facilityAC" value="ac">
+                                <span><i class="fas fa-snowflake me-1 text-muted"></i> Air Conditioned</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="filter-section">
+                        <div class="filter-heading">Minimum Rating</div>
+                        <div class="filter-group">
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="ratingRadio" value="0" checked>
+                                <span>All Ratings</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="ratingRadio" value="4.0">
+                                <span><i class="fas fa-star text-warning"></i> 4.0 Stars & Above</span>
+                            </label>
+                            <label class="custom-checkbox-label">
+                                <input type="radio" name="ratingRadio" value="4.5">
+                                <span><i class="fas fa-star text-warning"></i> 4.5 Stars & Above</span>
+                            </label>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right Column: Results & Catalog Grid -->
+                <section>
+                    <!-- Results Toolbar -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <span style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">Showing <span id="resultsCount">0</span> Hostels</span>
+                            <span style="color: #94a3b8; font-size: 0.85rem; margin-left: 0.5rem;">in Gudlavalleru</span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <label for="sortBySelect" style="font-size: 0.88rem; color: #64748b; font-weight: 500;">Sort By:</label>
+                            <select id="sortBySelect" style="padding: 0.5rem 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-pill); font-size: 0.88rem; background: #ffffff; color: var(--text-primary); outline: none;">
+                                <option value="recommended">Recommended (Top Rated)</option>
+                                <option value="price">Price: Low to High</option>
+                                <option value="distance">Distance: Nearest First</option>
+                                <option value="rating">Rating: Highest First</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Active Filter Chips Container -->
+                    <div id="activeFilterTags" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;"></div>
+
+                    <!-- Dynamic Hostel Cards Grid -->
+                    <div class="hostel-grid" id="hostelCatalogGrid">
+                        <!-- Populated dynamically -->
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: #64748b;">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                            <p style="margin-top: 1rem;">Fetching hostels...</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Card Modern Footer -->
+            <footer class="card-footer-bar">
+                <div class="footer-bottom-copy" style="border-top: none; padding-top: 0;">
+                    <div>&copy; 2026 Find My Hostel. Seshadri Rao Gudlavalleru Engineering College student support.</div>
+                    <div style="display: flex; gap: 1.5rem;">
+                        <a href="index.html" style="color: #94a3b8; text-decoration: none;">Home</a>
+                        <a href="admin.html" style="color: #94a3b8; text-decoration: none;">Admin</a>
+                    </div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- API Client Script -->
+    <script src="js/api-client.js"></script>
+
+    <!-- Catalog Page Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // State
+            let activeFilters = {
+                search: '',
+                type: '',
+                max_price: 15000,
+                max_distance: '',
+                min_rating: 0,
+                has_wifi: false,
+                has_mess: false,
+                has_ac: false,
+                sort_by: 'recommended'
+            };
+
+            // Read initial query params from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('search')) activeFilters.search = urlParams.get('search');
+            if (urlParams.has('type')) activeFilters.type = urlParams.get('type');
+            if (urlParams.has('max_price')) activeFilters.max_price = urlParams.get('max_price');
+            if (urlParams.has('max_distance')) activeFilters.max_distance = urlParams.get('max_distance');
+            if (urlParams.has('has_wifi')) activeFilters.has_wifi = true;
+            if (urlParams.has('has_mess')) activeFilters.has_mess = true;
+            if (urlParams.has('has_ac')) activeFilters.has_ac = true;
+
+            // Sync form controls to initial state
+            const searchInput = document.getElementById('filterSearch');
+            if (activeFilters.search) searchInput.value = activeFilters.search;
+
+            if (activeFilters.type === 'boys') document.getElementById('typeBoys').checked = true;
+            if (activeFilters.type === 'girls') document.getElementById('typeGirls').checked = true;
+            if (activeFilters.type === 'co-ed') document.getElementById('typeCoed').checked = true;
+
+            const priceSlider = document.getElementById('priceRange');
+            const priceLabel = document.getElementById('priceLabel');
+            if (activeFilters.max_price) {
+                priceSlider.value = activeFilters.max_price;
+                priceLabel.textContent = `₹${Number(activeFilters.max_price).toLocaleString()}`;
+            }
+
+            if (activeFilters.has_wifi) document.getElementById('facilityWifi').checked = true;
+            if (activeFilters.has_mess) document.getElementById('facilityMess').checked = true;
+            if (activeFilters.has_ac) document.getElementById('facilityAC').checked = true;
+
+            // Debounce helper
+            let debounceTimer;
+            function debounce(func, delay = 300) {
+                return function (...args) {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+
+            // Render function
+            async function fetchAndRenderHostels() {
+                const grid = document.getElementById('hostelCatalogGrid');
+                const countBadge = document.getElementById('resultsCount');
+
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: #64748b;">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 1rem; font-weight: 500;">Filtering accommodations...</p>
+                    </div>
+                `;
+
+                // Build query filter payload
+                const payload = {
+                    search: activeFilters.search,
+                    type: activeFilters.type,
+                    max_price: activeFilters.max_price < 15000 ? activeFilters.max_price : undefined,
+                    max_distance: activeFilters.max_distance || undefined,
+                    min_rating: activeFilters.min_rating > 0 ? activeFilters.min_rating : undefined,
+                    has_wifi: activeFilters.has_wifi ? 1 : undefined,
+                    has_mess: activeFilters.has_mess ? 1 : undefined,
+                    has_ac: activeFilters.has_ac ? 1 : undefined,
+                    sort_by: activeFilters.sort_by
+                };
+
+                const res = await ApiClient.getHostels(payload);
+
+                // Update Status Pill
+                const statusPill = document.getElementById('connectionStatusPill');
+                if (statusPill) {
+                    if (res.source === 'api') {
+                        statusPill.innerHTML = '<span class="status-dot online"></span> Live API';
+                    } else {
+                        statusPill.innerHTML = '<span class="status-dot offline"></span> Demo Mode';
+                    }
+                }
+
+                // Render active tags
+                renderActiveTags();
+
+                if (!res.hostels || res.hostels.length === 0) {
+                    countBadge.textContent = '0';
+                    grid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: #ffffff; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                            <i class="fas fa-search" style="font-size: 2.5rem; color: #94a3b8; margin-bottom: 1rem;"></i>
+                            <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">No Hostels Match Your Criteria</h3>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-top: 0.4rem;">Try relaxing your budget or removing some facility filters.</p>
+                            <button id="clearAllEmptyBtn" class="btn-pill-primary" style="margin-top: 1.25rem; padding: 0.6rem 1.5rem; font-size: 0.85rem;">Reset Filters</button>
+                        </div>
+                    `;
+                    document.getElementById('clearAllEmptyBtn')?.addEventListener('click', resetAll);
+                    return;
+                }
+
+                countBadge.textContent = res.hostels.length;
+
+                grid.innerHTML = res.hostels.map(h => {
+                    const typeLabel = h.hostel_type === 'girls' ? 'Girls' : (h.hostel_type === 'boys' ? 'Boys' : 'Co-Ed');
+                    const facilities = Array.isArray(h.facilities_available) ? h.facilities_available : [];
+                    const feeDisplay = h.min_monthly_fee ? `₹${Number(h.min_monthly_fee).toLocaleString()}` : 'Contact for fee';
+
+                    return `
+                        <article class="modern-hostel-card">
+                            <div class="card-media-banner">
+                                <i class="fas fa-building banner-icon"></i>
+                                <span class="type-pill">${typeLabel}</span>
+                                <span class="verified-pill"><i class="fas fa-check-circle"></i> Verified</span>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">${h.hostel_name}</h3>
+                                <div class="card-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${h.landmark ? h.landmark + ', ' : ''}${h.address}</span>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.85rem; font-size: 0.9rem;">
+                                    <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                    <strong style="color: #0f172a;">${Number(h.rating).toFixed(1)}</strong>
+                                    <span style="color: #94a3b8; font-size: 0.8rem;">(${h.distance_from_college_km} km to SRGEC)</span>
+                                </div>
+
+                                <div class="amenity-chip-group">
+                                    ${facilities.slice(0, 4).map(f => `<span class="amenity-chip"><i class="fas fa-check"></i> ${f.replace('_', ' ')}</span>`).join('')}
+                                </div>
+
+                                <div class="card-pricing-footer">
+                                    <div class="price-box">
+                                        <div class="amount">${feeDisplay}</div>
+                                        <div class="period">Per Month</div>
+                                    </div>
+                                    <div class="card-actions">
+                                        <a href="hostel-details.html?id=${h.hostel_id}" class="btn-pill-primary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem;">
+                                            <span>View Details</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+            }
+
+            function renderActiveTags() {
+                const tagBox = document.getElementById('activeFilterTags');
+                const tags = [];
+
+                if (activeFilters.search) {
+                    tags.push(`<span class="filter-tag-pill">Search: "${activeFilters.search}" <i class="fas fa-times" data-action="removeSearch"></i></span>`);
+                }
+                if (activeFilters.type) {
+                    tags.push(`<span class="filter-tag-pill">Type: ${activeFilters.type} <i class="fas fa-times" data-action="removeType"></i></span>`);
+                }
+                if (activeFilters.max_price < 15000) {
+                    tags.push(`<span class="filter-tag-pill">Max: ₹${Number(activeFilters.max_price).toLocaleString()} <i class="fas fa-times" data-action="removePrice"></i></span>`);
+                }
+                if (activeFilters.max_distance) {
+                    tags.push(`<span class="filter-tag-pill">≤ ${activeFilters.max_distance} km <i class="fas fa-times" data-action="removeDistance"></i></span>`);
+                }
+                if (activeFilters.has_wifi) {
+                    tags.push(`<span class="filter-tag-pill">WiFi <i class="fas fa-times" data-action="removeWifi"></i></span>`);
+                }
+                if (activeFilters.has_mess) {
+                    tags.push(`<span class="filter-tag-pill">Mess <i class="fas fa-times" data-action="removeMess"></i></span>`);
+                }
+                if (activeFilters.has_ac) {
+                    tags.push(`<span class="filter-tag-pill">AC <i class="fas fa-times" data-action="removeAC"></i></span>`);
+                }
+
+                tagBox.innerHTML = tags.join('');
+
+                tagBox.querySelectorAll('i[data-action]').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const act = this.getAttribute('data-action');
+                        if (act === 'removeSearch') { activeFilters.search = ''; searchInput.value = ''; }
+                        if (act === 'removeType') { activeFilters.type = ''; document.querySelectorAll('input[name="hostelType"]').forEach(cb => cb.checked = false); }
+                        if (act === 'removePrice') { activeFilters.max_price = 15000; priceSlider.value = 15000; priceLabel.textContent = '₹15,000'; }
+                        if (act === 'removeDistance') { activeFilters.max_distance = ''; document.querySelector('input[name="distanceRadio"][value=""]').checked = true; }
+                        if (act === 'removeWifi') { activeFilters.has_wifi = false; document.getElementById('facilityWifi').checked = false; }
+                        if (act === 'removeMess') { activeFilters.has_mess = false; document.getElementById('facilityMess').checked = false; }
+                        if (act === 'removeAC') { activeFilters.has_ac = false; document.getElementById('facilityAC').checked = false; }
+                        fetchAndRenderHostels();
+                    });
+                });
+            }
+
+            function resetAll() {
+                activeFilters = {
+                    search: '',
+                    type: '',
+                    max_price: 15000,
+                    max_distance: '',
+                    min_rating: 0,
+                    has_wifi: false,
+                    has_mess: false,
+                    has_ac: false,
+                    sort_by: 'recommended'
+                };
+                searchInput.value = '';
+                document.querySelectorAll('input[name="hostelType"]').forEach(cb => cb.checked = false);
+                priceSlider.value = 15000;
+                priceLabel.textContent = '₹15,000';
+                document.querySelector('input[name="distanceRadio"][value=""]').checked = true;
+                document.querySelectorAll('input[name="ratingRadio"][value="0"]').forEach(r => r.checked = true);
+                document.getElementById('facilityWifi').checked = false;
+                document.getElementById('facilityMess').checked = false;
+                document.getElementById('facilityAC').checked = false;
+                document.getElementById('sortBySelect').value = 'recommended';
+                fetchAndRenderHostels();
+            }
+
+            // Event Listeners
+            document.getElementById('resetFiltersBtn').addEventListener('click', resetAll);
+
+            searchInput.addEventListener('input', debounce(function (e) {
+                activeFilters.search = e.target.value.trim();
+                fetchAndRenderHostels();
+            }, 300));
+
+            document.querySelectorAll('input[name="hostelType"]').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    // Single choice behavior for clarity
+                    if (this.checked) {
+                        document.querySelectorAll('input[name="hostelType"]').forEach(other => { if (other !== this) other.checked = false; });
+                        activeFilters.type = this.value;
+                    } else {
+                        activeFilters.type = '';
+                    }
+                    fetchAndRenderHostels();
+                });
+            });
+
+            priceSlider.addEventListener('input', function (e) {
+                priceLabel.textContent = `₹${Number(e.target.value).toLocaleString()}`;
+            });
+
+            priceSlider.addEventListener('change', function (e) {
+                activeFilters.max_price = Number(e.target.value);
+                fetchAndRenderHostels();
+            });
+
+            document.querySelectorAll('input[name="distanceRadio"]').forEach(r => {
+                r.addEventListener('change', function () {
+                    activeFilters.max_distance = this.value;
+                    fetchAndRenderHostels();
+                });
+            });
+
+            document.querySelectorAll('input[name="ratingRadio"]').forEach(r => {
+                r.addEventListener('change', function () {
+                    activeFilters.min_rating = Number(this.value);
+                    fetchAndRenderHostels();
+                });
+            });
+
+            document.getElementById('facilityWifi').addEventListener('change', function () { activeFilters.has_wifi = this.checked; fetchAndRenderHostels(); });
+            document.getElementById('facilityMess').addEventListener('change', function () { activeFilters.has_mess = this.checked; fetchAndRenderHostels(); });
+            document.getElementById('facilityAC').addEventListener('change', function () { activeFilters.has_ac = this.checked; fetchAndRenderHostels(); });
+
+            document.getElementById('sortBySelect').addEventListener('change', function () {
+                activeFilters.sort_by = this.value;
+                fetchAndRenderHostels();
+            });
+
+            // Initial load
+            fetchAndRenderHostels();
+        });
+    </script>
+</body>
+</html>
