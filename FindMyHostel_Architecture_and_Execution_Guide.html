@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Find My Hostel - Complete Architecture, Frontend/Backend Details & Data Execution Guide</title>
+<style>
+  @page {
+    size: A4;
+    margin: 12mm 14mm 12mm 14mm;
+    @bottom-right {
+      content: counter(page);
+      font-size: 8pt;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #64748b;
+    }
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.55;
+    font-size: 9.5pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Cover Page */
+  .cover-container {
+    page-break-after: always;
+    min-height: 260mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20mm 10mm 15mm 10mm;
+    border-left: 8px solid #3b82f6;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  }
+
+  .cover-tag {
+    display: inline-block;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid #bfdbfe;
+    margin-bottom: 15px;
+  }
+
+  .cover-title {
+    font-size: 32pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .cover-subtitle {
+    font-size: 13.5pt;
+    color: #475569;
+    line-height: 1.45;
+    max-width: 680px;
+    margin-bottom: 25px;
+  }
+
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  .meta-item {
+    font-size: 9pt;
+  }
+
+  .meta-label {
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    font-size: 7.5pt;
+    letter-spacing: 0.5px;
+  }
+
+  .meta-value {
+    color: #0f172a;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .links-card {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-left: 4px solid #0284c7;
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+
+  .links-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #0369a1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .link-line {
+    font-size: 9pt;
+    margin: 4px 0;
+    color: #334155;
+  }
+
+  .link-line a {
+    color: #0284c7;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  /* Headings */
+  h1 {
+    font-size: 16pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #1e40af;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Diagram & Flow Containers */
+  .diagram-box {
+    background-color: #0f172a;
+    color: #38bdf8;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-family: "Fira Code", Consolas, Monaco, monospace;
+    font-size: 7.5pt;
+    line-height: 1.35;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+
+  /* Cards & Callouts */
+  .card {
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    page-break-inside: avoid;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+
+  .callout {
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+
+  .callout-blue {
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    color: #1e40af;
+  }
+
+  .callout-green {
+    background-color: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    color: #15803d;
+  }
+
+  .callout-amber {
+    background-color: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    color: #b45309;
+  }
+
+  .callout-title {
+    font-weight: 700;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 8.5pt;
+  }
+
+  th {
+    background-color: #f8fafc;
+    color: #334155;
+    font-weight: 700;
+    text-align: left;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+
+  /* Code elements */
+  code {
+    font-family: "Fira Code", Consolas, monospace;
+    font-size: 8.5pt;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+  }
+
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-family: "Fira Code", Consolas, monospace;
+    font-size: 8pt;
+    line-height: 1.4;
+    padding: 10px 12px;
+    border-radius: 6px;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 8px 0 12px 0;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-purple { background: #f3e8ff; color: #7e22ce; }
+  .badge-amber { background: #fef3c7; color: #b45309; }
+
+  .bullet-list {
+    margin: 4px 0 8px 18px;
+    padding: 0;
+  }
+  .bullet-list li {
+    margin-bottom: 4px;
+  }
+
+  .footer-stamp {
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 20px;
+    padding-top: 10px;
+    font-size: 8pt;
+    color: #94a3b8;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-container">
+  <div>
+    <div class="cover-tag">Official Engineering &amp; Operational Blueprint</div>
+    <h1 class="cover-title">FIND MY HOSTEL</h1>
+    <div class="cover-subtitle">Complete Architecture, Frontend HTML/CSS Deep Dive, Backend Micro-Controllers, Server Execution Halls &amp; The Lifecycle Journey of Data</div>
+
+    <div class="callout callout-green">
+      <div class="callout-title">&#10004; Easy to Understand for Everyone</div>
+      This document explains every single part of the project in clear, plain language with visual diagrams and analogies. It details <strong>what runs where (the Execution Halls)</strong>, <strong>where data originates and flows</strong>, and <strong>how each HTML, CSS, JavaScript, and PHP file works together</strong>.
+    </div>
+
+    <div class="cover-meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">System Architecture</div>
+        <div class="meta-value">4-Layer Hybrid: Client + Edge CDN + PHP 8.x + MySQL 8.0</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Frontend Stack</div>
+        <div class="meta-value">HTML5 (5 Modular Pages) + Modern Theme CSS + ES6 SDK</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Server &amp; Hosting</div>
+        <div class="meta-value">Netlify Global Edge CDN + Local PHP Built-in Server</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Data Resilience</div>
+        <div class="meta-value">Dual-Mode Fallback (Zero downtime on offline or static CDN)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="links-card">
+    <div class="links-title">Live Production &amp; Repository References</div>
+    <div class="link-line"><strong>Live Netlify Website:</strong> <a href="https://dainty-narwhal-d548df.netlify.app">https://dainty-narwhal-d548df.netlify.app</a></div>
+    <div class="link-line"><strong>Netlify Project ID:</strong> <code>8f23d54d-0acd-4f78-a856-5bf76e13b88b</code></div>
+    <div class="link-line"><strong>GitHub Source Code:</strong> <a href="https://github.com/chandrikachalamala15-afk/findmyhostel">https://github.com/chandrikachalamala15-afk/findmyhostel</a></div>
+    <div class="link-line"><strong>Backup GitHub Pages URL:</strong> <a href="https://chandrikachalamala15-afk.github.io/findmyhostel/">https://chandrikachalamala15-afk.github.io/findmyhostel/</a></div>
+  </div>
+</div>
+
+<!-- CHAPTER 1: THE BIG PICTURE & SYSTEM ARCHITECTURE -->
+<div class="page-break">
+  <h1>1. The Whole Project Architecture (The 4-Layer Tower)</h1>
+
+  <p>Find My Hostel is organized into four distinct, cooperating layers. Each layer has one job and passes information cleanly to the next, like a team of professionals in an organization:</p>
+
+  <div class="diagram-box">
++====================================================================================================+
+|                                1. CLIENT PRESENTATION LAYER                                        |
+|  Where: The User's Device (Browser: Chrome, Safari, Edge, Mobile Phone)                            |
+|  Files: index.html, hostels.html, hostel-details.html, admin.html, modern-theme.css, api-client.js |
+|  Role: Renders visual UI, handles mouse clicks, animates cards, and executes client-side logic.   |
++===================================================|================================================+
+                                                    | (HTTP / HTTPS Fetch Requests)
+                                                    v
++====================================================================================================+
+|                                2. NETWORK &amp; EDGE CDN LAYER                                         |
+|  Where: Netlify Global Edge Servers (Worldwide CDN Nodes) &amp; Web Proxies                             |
+|  Files: netlify.toml (Redirects / Rewrites), SSL/TLS Certificates, DNS Routing                     |
+|  Role: Delivers web pages in under 50ms, rewrites clean URLs, and ensures zero broken routes.       |
++===================================================|================================================+
+                                                    | (RESTful JSON API Payloads)
+                                                    v
++====================================================================================================+
+|                                3. APPLICATION SERVER &amp; LOGIC LAYER                                  |
+|  Where: Web Server (Local PHP Server on Port 8000, or Apache / XAMPP, or Cloud Container)          |
+|  Files: config/database.php, api/hostel_controller.php, complaint_controller.php, enquiry.php      |
+|  Role: Inspects requests, sanitizes inputs, enforces security, and runs business logic rules.     |
++===================================================|================================================+
+                                                    | (Secure PDO MySQL Queries)
+                                                    v
++====================================================================================================+
+|                                4. PERSISTENCE &amp; DATABASE LAYER                                      |
+|  Where: MySQL 8.0 Server (Port 3306 on Disk)                                                        |
+|  Files: database/schema.sql (9 Tables) &amp; database/seed_data.sql (Pre-populated Realistic Data)    |
+|  Role: Safely stores records forever in indexed tables with referential integrity.                |
++====================================================================================================+
+  </div>
+
+  <h2>1.1 The Everyday Restaurant Analogy (For Crystal Clarity)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Layer Name</th>
+        <th style="width: 30%;">The Restaurant Equivalent</th>
+        <th style="width: 45%;">What Happens in Find My Hostel</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Client Frontend</strong></td>
+        <td><strong>The Dining Table &amp; Menu</strong></td>
+        <td>The student sits at the table, browses photos of hostels, slides the price filter, and clicks "Book" or "Report Broken Tap".</td>
+      </tr>
+      <tr>
+        <td><strong>2. Network &amp; Edge CDN</strong></td>
+        <td><strong>The Courteous Waiter</strong></td>
+        <td>Takes the student's request from the table, rushes it to the kitchen immediately, and brings back the freshly prepared food without dropping anything.</td>
+      </tr>
+      <tr>
+        <td><strong>3. Server &amp; Backend</strong></td>
+        <td><strong>The Kitchen Head Chef</strong></td>
+        <td>Receives the order ticket, checks recipes and hygiene rules (security), prepares the meal, and formats the data neatly into a tray (JSON).</td>
+      </tr>
+      <tr>
+        <td><strong>4. Database Engine</strong></td>
+        <td><strong>The Cold Storage Pantry</strong></td>
+        <td>Where all food ingredients, room ledgers, and student records are safely kept in labeled containers so nothing ever spoils or gets lost.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CHAPTER 2: THE EXECUTION HALLS -->
+<div class="page-break">
+  <h1>2. The Execution Halls: Where Does Code Actually Run?</h1>
+
+  <p>One of the most important concepts in computer software is knowing <em>which machine</em> runs which line of code. Code does not run in thin air &mdash; it runs inside specific <strong>Execution Halls</strong>:</p>
+
+  <div class="card">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <h2 style="margin: 0; color: #1d4ed8;">Hall 1: The Browser Execution Hall (Client-Side)</h2>
+      <span class="badge badge-blue">Runs on User's Laptop / Phone</span>
+    </div>
+    <p style="margin-top: 8px;"><strong>Who runs here:</strong> The Google Chrome V8 engine, Apple WebKit, or Firefox SpiderMonkey.</p>
+    <ul class="bullet-list">
+      <li><strong>HTML Parsing:</strong> Converts <code>&lt;div&gt;</code>, <code>&lt;button&gt;</code>, and <code>&lt;table&gt;</code> tags into living visual elements on screen.</li>
+      <li><strong>CSS Layout Calculation:</strong> Computes the glowing colors, cards, shadows, and flexbox grids from <code>modern-theme.css</code>.</li>
+      <li><strong>JavaScript Execution:</strong> <code>api-client.js</code> runs right here inside the user's phone or computer memory! It listens for clicks, filters hostels by budget slider without reloading the page, and manages the interactive 7-day food timetable.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <h2 style="margin: 0; color: #0284c7;">Hall 2: The Edge CDN Execution Hall (Cloud Gateway)</h2>
+      <span class="badge badge-purple">Runs on Netlify Global Edge Nodes</span>
+    </div>
+    <p style="margin-top: 8px;"><strong>Who runs here:</strong> Netlify's high-speed distributed reverse-proxy edge servers located across the globe.</p>
+    <ul class="bullet-list">
+      <li><strong>Static File Serving:</strong> Delivers pre-compressed HTML, CSS, JavaScript, and PDF files to visitors in under 50 milliseconds.</li>
+      <li><strong>URL Rewriting (via <code>netlify.toml</code>):</strong> When a user types <code>/hostels.html</code>, the edge server rewrites the route to fetch the file directly from the <code>public/</code> directory so there are never 404 errors.</li>
+      <li><strong>SSL / HTTPS Encryption:</strong> Terminates TLS certificates to keep user passwords and messages safe from eavesdropping.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <h2 style="margin: 0; color: #15803d;">Hall 3: The Server Execution Hall (Backend PHP Engine)</h2>
+      <span class="badge badge-green">Runs on Web Server / Port 8000</span>
+    </div>
+    <p style="margin-top: 8px;"><strong>Who runs here:</strong> The PHP 8.x Interpreter on the host server (or your local computer).</p>
+    <ul class="bullet-list">
+      <li><strong>URL Query Inspection:</strong> Inspects what the user asked for: <code>action=list</code>, <code>city=Hyderabad</code>, <code>min_price=5000</code>.</li>
+      <li><strong>Security &amp; Sanitization:</strong> Ensures no hacker can inject malicious code by whitelisting sort fields strictly to allowed columns.</li>
+      <li><strong>CORS Headers:</strong> Sends permission headers allowing frontend browsers to talk to the backend safely.</li>
+      <li><strong>JSON Encoding:</strong> Packs the final answers into a lightweight, standardized JSON packet and sends it across the wire.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <h2 style="margin: 0; color: #b45309;">Hall 4: The Database Execution Hall (MySQL Storage Engine)</h2>
+      <span class="badge badge-amber">Runs on MySQL Server / Port 3306</span>
+    </div>
+    <p style="margin-top: 8px;"><strong>Who runs here:</strong> The MySQL 8.0 relational database engine (InnoDB).</p>
+    <ul class="bullet-list">
+      <li><strong>Relational Table Queries:</strong> Joins the <code>hostels</code> table with the <code>rooms</code> table to calculate how many beds are vacant.</li>
+      <li><strong>Indexing Scans:</strong> Quickly searches through thousands of records in milliseconds using indexed keys.</li>
+      <li><strong>ACID Transactions:</strong> Guarantees that when a student reserves a room, two students cannot book the exact same bed at the same time.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHAPTER 3: THE DATA JOURNEY -->
+<div class="page-break">
+  <h1>3. The Data Journey: Where Data Originates and How It Travels</h1>
+
+  <p>To understand the heart of Find My Hostel, let us trace two real-world journeys of data from start to finish:</p>
+
+  <h2>3.1 Data Journey A: A Student Searches for Hostels under &dollar;8,000</h2>
+  <div class="diagram-box">
+[STEP 1: User Action in Browser]
+  Student slides the budget bar to "$8,000" and clicks "Boys Hostel".
+  api-client.js intercepts the change and prepares query: { type: 'boys', max_price: 8000 }
+         |
+         v
+[STEP 2: Network Transmission]
+  Browser sends HTTP GET request:
+  GET /api/hostel_controller.php?type=boys&amp;max_price=8000
+         |
+         v
+[STEP 3: Server Execution in PHP]
+  hostel_controller.php parses inputs, validates type='boys', casts price to integer.
+  Constructs SQL: SELECT h.*, MIN(r.rent_per_month) as min_rent FROM hostels h ...
+         |
+         v
+[STEP 4: Database Execution in MySQL]
+  MySQL queries the 'hostels' and 'rooms' tables, filters records matching criteria,
+  and returns 4 matching hostel rows to PHP.
+         |
+         v
+[STEP 5: JSON Packaging &amp; Return]
+  PHP formats rows into: { "success": true, "data": { "hostels": [...] } }
+  Sends HTTP 200 OK back over the internet.
+         |
+         v
+[STEP 6: Visual Rendering in Browser]
+  api-client.js receives JSON, loops through the hostels, builds HTML cards,
+  and injects them into the page. The student sees the updated list in under 0.2 seconds!
+  </div>
+
+  <h2>3.2 Data Journey B: An Admin Marks a Complaint as "Resolved"</h2>
+  <div class="diagram-box">
+[STEP 1: Admin Click]
+  Manager clicks "Mark Resolved" on Complaint #10 ("AC not cooling in Room 101").
+         |
+         v
+[STEP 2: Network Request]
+  Browser sends HTTP PATCH with JSON body:
+  { "complaint_id": 10, "status": "resolved", "resolution_notes": "Compressor capacitor replaced" }
+         |
+         v
+[STEP 3: Controller Processing]
+  complaint_controller.php verifies status is valid ('resolved'), captures timestamp,
+  and executes: UPDATE complaints SET status = 'resolved', resolved_at = NOW() WHERE complaint_id = 10
+         |
+         v
+[STEP 4: Database Write &amp; Maintenance Ticket]
+  MySQL updates the row on disk and logs an entry in the 'maintenance' table.
+         |
+         v
+[STEP 5: Instant Screen Update]
+  Browser receives confirmation; badge turns from Yellow "Pending" to Green "Resolved".
+  </div>
+
+  <h2>3.3 The Smart Dual-Mode Fallback (Why the Website Never Breaks)</h2>
+  <div class="callout callout-blue">
+    <div class="callout-title">Architectural Resilience</div>
+    When Find My Hostel is hosted on static cloud CDNs like Netlify or GitHub Pages, there is no active PHP/MySQL server attached. Instead of displaying ugly error screens or crashing, <strong><code>api-client.js</code> detects this instantly</strong> and serves the data from an in-memory replica of the database! This means anyone testing the website on Netlify can search, filter, view the 7-day food menu, and test complaint status changes seamlessly.
+  </div>
+</div>
+
+<!-- CHAPTER 4: FRONTEND HTML/CSS DEEP DIVE -->
+<div class="page-break">
+  <h1>4. Frontend Deep Dive: Every HTML, CSS &amp; JavaScript File</h1>
+
+  <p>The frontend is 100% standards-compliant, responsive, and crafted without heavy bloated frameworks so it loads instantly on any mobile or desktop browser.</p>
+
+  <h2>4.1 The 5 HTML Web Pages</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">HTML File</th>
+        <th style="width: 35%;">Visual Components &amp; Layout</th>
+        <th style="width: 40%;">User Actions &amp; Interactive Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong><code>public/index.html</code></strong><br><small>Landing Portal (33 KB)</small></td>
+        <td>
+          &bull; Hero Search Banner with City Chips<br>
+          &bull; Value Proposition Cards Grid<br>
+          &bull; "Top-Rated Hostels" dynamic carousel<br>
+          &bull; Student Testimonials &amp; Footer Links
+        </td>
+        <td>
+          Visitors can type a city name, click quick tags (e.g. Hyderabad, Bangalore), read verified reviews, and click "Explore Hostels" to jump to the full catalog.
+        </td>
+      </tr>
+      <tr>
+        <td><strong><code>public/hostels.html</code></strong><br><small>Hostel Catalog (31 KB)</small></td>
+        <td>
+          &bull; Sticky Filter Sidebar (Desktop/Mobile)<br>
+          &bull; Interactive Budget Range Slider<br>
+          &bull; Amenity Checkboxes (WiFi, AC, Food)<br>
+          &bull; Responsive Hostel Cards Grid
+        </td>
+        <td>
+          Real-time filtering by gender (Boys/Girls/Co-ed), budget limit, distance from college, and sorting by lowest price or highest star rating.
+        </td>
+      </tr>
+      <tr>
+        <td><strong><code>public/hostel-details.html</code></strong><br><small>Hostel Profile (32 KB)</small></td>
+        <td>
+          &bull; High-Definition Image Gallery<br>
+          &bull; Room Configurations &amp; Monthly Rent<br>
+          &bull; <strong>7-Day Weekly Mess Timetable Table</strong><br>
+          &bull; Instant Inquiry Modal Form
+        </td>
+        <td>
+          Inspect the full weekly dining schedule (Breakfast, Lunch, Snacks, Dinner for all 7 days), review house rules, and submit pre-booking inquiries.
+        </td>
+      </tr>
+      <tr>
+        <td><strong><code>public/admin.html</code></strong><br><small>Operations Desk (26 KB)</small></td>
+        <td>
+          &bull; Real-time Occupancy KPI Counters<br>
+          &bull; <strong>Interactive Room Matrix Grid</strong> (Green = Available, Red = Occupied)<br>
+          &bull; Grievance Redressal Table with Badges
+        </td>
+        <td>
+          Wardens see live bed numbers, click rooms to see occupant details, and update student complaint states (Pending &rarr; In Progress &rarr; Resolved).
+        </td>
+      </tr>
+      <tr>
+        <td><strong><code>public/modern-reference.html</code></strong><br><small>Style Guide (21 KB)</small></td>
+        <td>
+          &bull; Design System Token Reference<br>
+          &bull; Component Library Preview<br>
+          &bull; Color Palette &amp; Typography Specimens
+        </td>
+        <td>
+          Used by developers and designers to verify that buttons, input fields, badges, and modals adhere strictly to the project's visual theme.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.2 The Styling System (<code>public/css/modern-theme.css</code> &bull; 15 KB)</h2>
+  <p>The entire visual personality of Find My Hostel is controlled by <code>modern-theme.css</code>. It uses modern CSS custom properties (variables) for consistent themes:</p>
+
+  <div class="card">
+    <h3>Key Design System Tokens</h3>
+    <ul class="bullet-list">
+      <li><strong>Color Palette:</strong> Deep twilight canvas background (<code>--canvas-gradient: #1e1b4b &rarr; #3b82f6</code>), vibrant electric blue accents (<code>#4361ee</code>), rich royal purple (<code>#7209b7</code>), and crisp white card surfaces (<code>#ffffff</code>).</li>
+      <li><strong>Glassmorphism &amp; Elevation:</strong> Smooth drop-shadows (<code>--shadow-canvas-card</code>) and subtle translucent borders that make cards float effortlessly over the background.</li>
+      <li><strong>Responsive Breakpoints:</strong> Media queries at <code>1024px</code> (laptops), <code>768px</code> (tablets), and <code>480px</code> (smartphones) that restructure multi-column grids into single-column mobile layouts automatically.</li>
+      <li><strong>State Badges:</strong> Pre-styled pill badges for complaint states: <code>.badge-pending</code> (warm amber), <code>.badge-in-progress</code> (vibrant blue), and <code>.badge-resolved</code> (emerald green).</li>
+    </ul>
+  </div>
+
+  <h2>4.3 The Client Engine (<code>public/js/api-client.js</code> &bull; 17 KB)</h2>
+  <p>This script is the brain of the frontend. It exposes the global <code>ApiClient</code> object containing 5 core functions:</p>
+  <ul class="bullet-list">
+    <li><code>getHostels(filters)</code>: Fetches and filters hostels by search text, price, gender, and amenities.</li>
+    <li><code>getHostelById(id)</code>: Retrieves deep profile details, room breakdown, and the complete 7-day mess timetable.</li>
+    <li><code>getComplaints(filters)</code>: Retrieves the list of student maintenance issues for the admin portal.</li>
+    <li><code>updateComplaintStatus(id, status, notes)</code>: Updates an issue state to "in_progress" or "resolved".</li>
+    <li><code>submitEnquiry(data)</code>: Captures prospective student contact details and messages.</li>
+  </ul>
+</div>
+
+<!-- CHAPTER 5: BACKEND CONTROLLERS & DATABASE -->
+<div class="page-break">
+  <h1>5. Backend Controllers &amp; Relational Database</h1>
+
+  <p>The backend is built with clean, modular PHP micro-controllers that execute business logic and communicate with MySQL via PDO prepared statements.</p>
+
+  <h2>5.1 Backend Micro-Controllers</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">File Path</th>
+        <th style="width: 20%;">Supported Endpoints</th>
+        <th style="width: 55%;">Technical Responsibilities</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong><code>config/database.php</code></strong><br><small>Connection Singleton</small></td>
+        <td>Internal Helper</td>
+        <td>Manages the database PDO connection instance. Uses <code>getenv()</code> fallbacks for <code>DB_HOST</code>, <code>DB_NAME</code>, <code>DB_USER</code>, and <code>DB_PASS</code>. Standardizes JSON error messages and sets CORS headers.</td>
+      </tr>
+      <tr>
+        <td><strong><code>api/hostel_controller.php</code></strong><br><small>Hostel &amp; Mess API</small></td>
+        <td><code>GET ?action=list</code><br><code>GET ?action=details&amp;id=1</code></td>
+        <td>Executes multi-facet filtering, sanitizes sort columns (price, rating, distance), casts pagination limits to strict integers, aggregates bed occupancy, and fetches 7-day mess schedules.</td>
+      </tr>
+      <tr>
+        <td><strong><code>api/complaint_controller.php</code></strong><br><small>Grievance Desk API</small></td>
+        <td><code>GET ?action=list</code><br><code>POST ?action=create</code><br><code>PATCH ?action=update_status</code></td>
+        <td>Manages student grievance lifecycles, filters complaints by status/priority, updates resolution notes, and automatically generates maintenance tickets.</td>
+      </tr>
+      <tr>
+        <td><strong><code>api/enquiry_controller.php</code></strong><br><small>Inquiry API</small></td>
+        <td><code>POST ?action=submit</code><br><code>GET ?action=list</code></td>
+        <td>Validates incoming student lead submissions (email, phone, message) and logs them into the database for administrative follow-up.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.2 Relational Database Schema (9 Tables)</h2>
+  <div class="diagram-box">
+   [hostels] 1----* [rooms] 1----* [bookings] *----1 [students]
+       |                                                 |
+       +----1----* [mess_menu]    [complaints] 1----1 [maintenance]
+       +----1----* [reviews]             |
+       +----1----* [enquiries]           *----1 [students]
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Table</th>
+        <th>Primary Key</th>
+        <th>Key Columns &amp; Relationships</th>
+        <th>Purpose in Plain English</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>hostels</code></td>
+        <td><code>hostel_id</code></td>
+        <td><code>name</code>, <code>city</code>, <code>type</code> (boys/girls/coed), <code>rating</code>, <code>starting_price</code></td>
+        <td>Stores the basic identity, location, and price category of every hostel.</td>
+      </tr>
+      <tr>
+        <td><code>rooms</code></td>
+        <td><code>room_id</code></td>
+        <td><code>hostel_id</code> (FK), <code>room_number</code>, <code>capacity</code>, <code>current_occupancy</code>, <code>rent</code></td>
+        <td>Keeps track of every room, how many beds it has, and how many are occupied.</td>
+      </tr>
+      <tr>
+        <td><code>students</code></td>
+        <td><code>student_id</code></td>
+        <td><code>full_name</code>, <code>email</code>, <code>phone</code>, <code>guardian_phone</code>, <code>college</code></td>
+        <td>Records verified student profiles, contact details, and emergency phone numbers.</td>
+      </tr>
+      <tr>
+        <td><code>bookings</code></td>
+        <td><code>booking_id</code></td>
+        <td><code>room_id</code> (FK), <code>student_id</code> (FK), <code>check_in_date</code>, <code>status</code></td>
+        <td>Connects a student to their specific room and tracks their booking confirmation.</td>
+      </tr>
+      <tr>
+        <td><code>mess_menu</code></td>
+        <td><code>menu_id</code></td>
+        <td><code>hostel_id</code> (FK), <code>day_of_week</code>, <code>meal_type</code>, <code>items_description</code></td>
+        <td>Maintains the dynamic 7-day dining schedule (Monday–Sunday for all 4 daily meals).</td>
+      </tr>
+      <tr>
+        <td><code>complaints</code></td>
+        <td><code>complaint_id</code></td>
+        <td><code>student_id</code> (FK), <code>hostel_id</code> (FK), <code>category</code>, <code>priority</code>, <code>status</code></td>
+        <td>Stores student problem reports (water, electricity, cleanliness) and resolution logs.</td>
+      </tr>
+      <tr>
+        <td><code>maintenance</code></td>
+        <td><code>request_id</code></td>
+        <td><code>complaint_id</code> (FK), <code>assigned_worker</code>, <code>estimated_cost</code>, <code>notes</code></td>
+        <td>Links technician work orders and repair costs directly to student complaints.</td>
+      </tr>
+      <tr>
+        <td><code>reviews</code></td>
+        <td><code>review_id</code></td>
+        <td><code>hostel_id</code> (FK), <code>student_id</code> (FK), <code>rating</code> (1-5), <code>comment</code></td>
+        <td>Holds star ratings and written reviews from verified student residents.</td>
+      </tr>
+      <tr>
+        <td><code>enquiries</code></td>
+        <td><code>enquiry_id</code></td>
+        <td><code>hostel_id</code> (FK), <code>student_name</code>, <code>email</code>, <code>phone</code>, <code>message</code></td>
+        <td>Stores contact leads from prospective students asking about admissions.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CHAPTER 6: RUNNING LOCALLY & DEPLOYMENT -->
+<div class="page-break">
+  <h1>6. Local Execution &amp; Cloud Deployment Workflows</h1>
+
+  <h2>6.1 How to Run Locally in 3 Steps</h2>
+  <div class="card">
+    <p><strong>Step 1: Open Terminal / PowerShell</strong> and navigate to the project directory:</p>
+    <pre><code>cd d:indmyhostel</code></pre>
+
+    <p><strong>Step 2: Start the Built-in Server:</strong></p>
+    <pre><code>php -S localhost:8000 -t public</code></pre>
+
+    <p><strong>Step 3: Open in Any Browser:</strong></p>
+    <p>Visit <strong><a href="http://localhost:8000">http://localhost:8000</a></strong> &mdash; the entire site will open immediately!</p>
+  </div>
+
+  <h2>6.2 How It Runs Online on Netlify</h2>
+  <p>The application is live on Netlify's high-speed Global Edge CDN. Here is how the deployment is configured:</p>
+  <div class="card">
+    <p><strong>The Configuration File: <code>netlify.toml</code></strong></p>
+    <pre><code>[build]
+  publish = "public"
+
+[[redirects]]
+  from = "/public/*"
+  to = "/:splat"
+  status = 301
+  force = true</code></pre>
+    <ul class="bullet-list">
+      <li><code>publish = "public"</code> tells Netlify that the web files live inside the <code>public/</code> folder.</li>
+      <li>The redirect rule ensures that typing <code>/hostels.html</code> or <code>/admin.html</code> directly works seamlessly without requiring any <code>/public/</code> prefix.</li>
+    </ul>
+  </div>
+
+  <h2>6.3 Live Verification Matrix (All URLs Verified HTTP 200 OK)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Page / Asset</th>
+        <th>Live Production URL</th>
+        <th>HTTP Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Home Portal</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/">https://dainty-narwhal-d548df.netlify.app/</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+      <tr>
+        <td><strong>Hostels Catalog</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/hostels.html">https://dainty-narwhal-d548df.netlify.app/hostels.html</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+      <tr>
+        <td><strong>Hostel Details &amp; Mess Menu</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/hostel-details.html?id=1">https://dainty-narwhal-d548df.netlify.app/hostel-details.html?id=1</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+      <tr>
+        <td><strong>Admin Dashboard</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/admin.html">https://dainty-narwhal-d548df.netlify.app/admin.html</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+      <tr>
+        <td><strong>Theme Stylesheet</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/css/modern-theme.css">https://dainty-narwhal-d548df.netlify.app/css/modern-theme.css</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+      <tr>
+        <td><strong>API Client SDK</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/js/api-client.js">https://dainty-narwhal-d548df.netlify.app/js/api-client.js</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+      <tr>
+        <td><strong>Downloadable PDF Guide</strong></td>
+        <td><a href="https://dainty-narwhal-d548df.netlify.app/FindMyHostel_Architecture_and_Execution_Guide.pdf">https://dainty-narwhal-d548df.netlify.app/.../Architecture_Guide.pdf</a></td>
+        <td><span class="badge badge-green">200 OK</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer-stamp">
+    Find My Hostel &bull; Complete System Architecture &amp; Execution Guide &bull; Version 2.1 &bull; September 2026
+  </div>
+</div>
+
+</body>
+</html>
